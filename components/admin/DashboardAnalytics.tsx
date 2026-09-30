@@ -79,17 +79,17 @@ function Donut({
     segments.reduce((s, x) => s + x.value, 0),
     1,
   );
-  let acc = 0;
   const r = 42;
   const c = 2 * Math.PI * r;
+  const lengths = segments.map((seg) => (seg.value / total) * c);
+  const offsets = lengths.map((_, i) => -lengths.slice(0, i).reduce((s, l) => s + l, 0));
   return (
     <div className="relative mx-auto h-40 w-40">
       <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
         {segments.map((seg, i) => {
-          const len = (seg.value / total) * c;
+          const len = lengths[i];
           const dash = `${len} ${c - len}`;
-          const offset = -acc;
-          acc += len;
+          const offset = offsets[i];
           return (
             <circle
               key={i}
