@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  posts        Post[]
+}
+
+/// type: COURSE (Khoá học) | ONLINE (Học online) | EVENT (Lịch sự kiện) | BLOG
+model Post {
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  summary         String?   @db.Text
+  contentHtml     String    @db.Text
+  thumbnail       String?
+  type            String    @default("BLOG")
+  status          String    @default("DRAFT")
+  views           Int       @default(0)
+  sortOrder       Int       @default(0)
+  isNew           Boolean   @default(false)
+  isFeatured      Boolean   @default(false)
+  isVisible       Boolean   @default(true)
+  tags            String?
+  seoKeywords     String?
+  canonicalUrl    String?
+  publishedAt     DateTime?
+  eventDate       DateTime?
+  location        String?
+  price           String?
+  duration        String?
+  audience        String?
+  schedule        String?
+  validity        String?
+  offer           String?
+  goals           String?   @db.Text
+  metaTitle       String?
+  metaDescription String?   @db.Text
+
+  categoryId  String?
+  category    Category?       @relation(fields: [categoryId], references: [id])
+  authorId    String
+  author      User            @relation(fields: [authorId], references: [id])
+  packages    CoursePackage[]
+  lessons     Lesson[]
+  enrollments Enrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([type, status])
+  @@index([type, sortOrder])
+}
+
+/// Gói học của một khoá học (Basic / Standard / Advance…)
+model CoursePackage {
+  id          String       @id @default(cuid())
+  postId      String
+  post        Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  name        String
+  badge       String       @default("leaf")
+  description String?
+  price       Int          @default(0)
+  oldPrice    Int?
+  sortOrder   Int          @default(0)
+  enrollments Enrollment[]
+
+  @@index([postId])
+}
+
+model Lesson {
+  id          String           @id @default(cuid())
+  postId      String
+  post        Post             @relation(fields: [postId], references: [id], onDelete: Cascade)
+  chapter     String           @default("")
+  title       String
+  videoUrl    String           @default("")
+  duration    String?
+  description String?          @db.Text
+  isPreview   Boolean          @default(false)
+  sortOrder   Int              @default(0)
+  progress    LessonProgress[]
+
+  @@index([postId, sortOrder])
+}
+
+model Student {
+  id           String           @id @default(cuid())
+  email        String           @unique
+  passwordHash String
+  name         String           @default("")
+  phone        String?
+  province     String?
+  ward         String?
+  address      String?
+  lastLoginAt  DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  enrollments  Enrollment[]
+  progress     LessonProgress[]
+}
+
+/// purpose: REGISTER | RESET
+model VerificationCode {
+  id        String   @id @default(cuid())
+  email     String
+  purpose   String
+  codeHash  String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email, purpose])
+}
+
+/// status: PENDING (chờ xác nhận) | ACTIVE (đang học) | CANCELLED
+model Enrollment {
+  id          String         @id @default(cuid())
+  code        String         @unique
+  studentId   String
+  student     Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  postId      String
+  post        Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  packageId   String?
+  package     CoursePackage? @relation(fields: [packageId], references: [id], onDelete: SetNull)
+  packageName String?
+  amount      Int            @default(0)
+  oldAmount   Int?
+  status      String         @default("PENDING")
+  fullName    String
+  phone       String
+  address     String?
+  note        String?        @db.Text
+  adminNote   String?        @db.Text
+  activatedAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([studentId])
+  @@index([postId])
+  @@index([status])
+}
+
+model LessonProgress {
+  id           String    @id @default(cuid())
+  studentId    String
+  student      Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lessonId     String
+  lesson       Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completed    Boolean   @default(false)
+  completedAt  DateTime?
+  lastViewedAt DateTime  @default(now())
+
+  @@unique([studentId, lessonId])
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  type      String   @default("BLOG")
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model ContactInquiry {
+  id            String   @id @default(cuid())
+  fullName      String
+  companyName   String?
+  email         String
+  phone         String
+  serviceType   String?
+  message       String   @db.Text
+  attachmentUrl String?
+  status        String   @default("NEW")
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id              String   @id @default("site_config")
+  companyName     String   @default("Phương Lily Academy")
+  slogan          String?  @default("Học Yoga - Hiểu cơ thể - Kiến tạo sức khoẻ")
+  hotline         String?
+  phone           String?
+  email           String?
+  workingHours    String?
+  headOffice      String?
+  factoryAddress  String?
+  website         String?
+  mapsCoords      String?
+  mapsEmbedUrl    String?  @db.Text
+  googleAnalytics String?  @db.Text
+  googleWebmaster String?  @db.Text
+  headJs          String?  @db.Text
+  bodyJs          String?  @db.Text
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  seoKeywords     String?
+  primaryKeyword  String?
+  mailerHost      String?
+  mailerPort      String?
+  mailerSecure    String?
+  mailerEmail     String?
+  mailerPassword  String?
+  bannerData      String?  @db.Text
+  socialLinks     String?  @db.Text
+  updatedAt       DateTime @updatedAt
+}
+
+model VisitLog {
+  id        String   @id @default(cuid())
+  path      String   @default("/")
+  ip        String?
+  browser   String   @default("Khác")
+  device    String   @default("desktop")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([browser])
+  @@index([device])
+  @@index([ip])
+}

@@ -1,0 +1,410 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #1a1f18;
+  --paper: #ffffff;
+  --mist: #eef2e8;
+  --sage: #dbe3cf;
+  --sage-deep: #c9d6b6;
+  --forest: #1d3a1f;
+  --leaf: #2f6b2c;
+  --leaf-hover: #245622;
+  --moss: #a4bf86;
+  --moss-soft: #c7d9ab;
+  --olive: #a0b36b;
+  --olive-deep: #3b4a23;
+  --lime: #c9d63f;
+  --lime-bright: #e8f200;
+  --brass: #3f7d3a;
+  --line: rgba(29, 58, 31, 0.14);
+  --background: var(--sage);
+  --foreground: var(--ink);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-mist: var(--mist);
+  --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-forest: var(--forest);
+  --color-leaf: var(--leaf);
+  --color-leaf-hover: var(--leaf-hover);
+  --color-moss: var(--moss);
+  --color-moss-soft: var(--moss-soft);
+  --color-olive: var(--olive);
+  --color-olive-deep: var(--olive-deep);
+  --color-lime: var(--lime);
+  --color-lime-bright: var(--lime-bright);
+  --color-brass: var(--brass);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--moss);
+  color: var(--forest);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.container-site {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-site {
+    padding-inline: 2rem;
+  }
+}
+
+/* ---------------- Elaria: roll text (label slides up, copy slides in) ---------------- */
+.roll {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  line-height: 1.25;
+}
+
+.roll > span {
+  display: block;
+  transition: transform 0.55s var(--ease-out-expo);
+}
+
+.roll > span + span {
+  position: absolute;
+  inset: 0;
+  transform: translateY(110%);
+}
+
+.group:hover .roll > span:first-child,
+.roll-host:hover .roll > span:first-child {
+  transform: translateY(-110%);
+}
+
+.group:hover .roll > span + span,
+.roll-host:hover .roll > span + span {
+  transform: translateY(0);
+}
+
+/* Elaria: arrow exits top-right, a new one enters from bottom-left */
+.arrow-swap {
+  position: relative;
+  overflow: hidden;
+}
+
+.arrow-swap > svg {
+  transition: transform 0.55s var(--ease-out-expo);
+}
+
+.arrow-swap > svg + svg {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  transform: translate(-150%, 150%);
+}
+
+.group:hover .arrow-swap > svg:first-child {
+  transform: translate(150%, -150%);
+}
+
+.group:hover .arrow-swap > svg + svg {
+  transform: translate(0, 0);
+}
+
+/* ---------------- Pawlates: circle expands to fill the button ---------------- */
+.paw-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.paw-btn .paw-fill {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  right: var(--paw-inset, 6px);
+  width: var(--paw-size, 32px);
+  height: var(--paw-size, 32px);
+  border-radius: 9999px;
+  background: var(--paw-color, var(--leaf));
+  transform: translateY(-50%) scale(1);
+  transition: transform 0.7s var(--ease-out-expo);
+}
+
+.paw-btn:hover .paw-fill {
+  transform: translateY(-50%) scale(var(--paw-scale, 14));
+}
+
+.paw-btn .paw-label {
+  transition: color 0.45s var(--ease-out-expo);
+}
+
+.paw-btn:hover .paw-label {
+  color: var(--paw-hover-text, #fff);
+}
+
+.paw-btn .paw-arrow {
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.paw-btn:hover .paw-arrow {
+  transform: rotate(45deg);
+}
+
+/* Pawlates avatar stack */
+.avatar-stack > * {
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    margin 0.5s var(--ease-out-expo);
+}
+
+.avatar-stack:hover > * {
+  margin-left: 0.15rem;
+}
+
+.avatar-stack > *:hover {
+  transform: translateY(-6px) scale(1.12);
+  z-index: 10;
+}
+
+@keyframes avatar-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4) translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.in-view .avatar-pop {
+  animation: avatar-pop 0.7s var(--ease-out-expo) both;
+}
+
+/* ---------------- Icon spin on hover (Academy) ---------------- */
+.icon-spin {
+  transition: transform 0.9s var(--ease-in-out);
+}
+
+.group:hover .icon-spin {
+  transform: rotate(360deg);
+}
+
+/* ---------------- Accordion height animation ---------------- */
+.collapse-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.6s var(--ease-out-expo),
+    opacity 0.45s ease;
+  opacity: 0;
+}
+
+.collapse-grid[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.collapse-grid > div {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ---------------- Reveal on scroll ---------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------- Marquee ---------------- */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+
+.marquee-pause:hover .marquee {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------------- Hero slideshow ---------------- */
+@keyframes kenburns {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+.kenburns {
+  animation: kenburns 9s ease-out both;
+}
+
+@keyframes bar-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.bar-fill {
+  transform-origin: left;
+  animation: bar-fill var(--slide-duration, 6s) linear both;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.float-y {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 1s var(--ease-out-expo) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .kenburns,
+  .float-y {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------- Rich text ---------------- */
+:where(.prose-pl) h2 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--forest);
+  margin: 2rem 0 0.75rem;
+}
+
+:where(.prose-pl) h3 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--forest);
+  margin: 1.5rem 0 0.5rem;
+}
+
+:where(.prose-pl) p,
+:where(.prose-pl) li {
+  color: color-mix(in oklab, var(--ink) 78%, transparent);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+:where(.prose-pl) ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+:where(.prose-pl) ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+
+:where(.prose-pl) blockquote {
+  border-left: 3px solid var(--moss);
+  padding-left: 1.25rem;
+  margin: 1.75rem 0;
+  font-style: italic;
+}
+
+:where(.prose-pl) a {
+  color: var(--leaf);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:where(.prose-pl) img,
+:where(.prose-pl) video,
+:where(.prose-pl) iframe {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  margin: 1.5rem auto;
+}
+
+:where(.prose-pl) table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+:where(.prose-pl) th,
+:where(.prose-pl) td {
+  border: 1px solid var(--line);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
