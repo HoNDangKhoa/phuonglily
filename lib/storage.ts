@@ -36,6 +36,13 @@ export function getBlobToken() {
   );
 }
 
+export function getBlobAuth(): { token?: string } | null {
+  const token = getBlobToken();
+  if (token) return { token };
+  if (process.env.BLOB_STORE_ID) return {};
+  return null;
+}
+
 /**
  * Upload file:
  * - Production / có BLOB_READ_WRITE_TOKEN → Vercel Blob
@@ -52,11 +59,11 @@ export async function uploadFile(
   const ext = path.extname(file.name) || ".bin";
   const filename = `${folder}/${randomUUID()}${ext}`;
 
-  const blobToken = getBlobToken();
-  if (blobToken) {
+  const blobAuth = getBlobAuth();
+  if (blobAuth) {
     const blob = await put(filename, file, {
       access: "public",
-      token: blobToken,
+      ...blobAuth,
     });
     return { url: blob.url, pathname: blob.pathname, provider: "blob" };
   }
@@ -64,7 +71,7 @@ export async function uploadFile(
   // Local filesystem (không dùng được trên Vercel serverless)
   if (process.env.VERCEL) {
     throw new Error(
-      "BLOB_READ_WRITE_TOKEN is required on Vercel. Enable Vercel Blob in the project.",
+      "Vercel Blob is required on Vercel. Connect a Blob store to the project.",
     );
   }
 

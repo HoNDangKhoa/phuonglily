@@ -5,7 +5,7 @@ import { readdir, stat, unlink } from "fs/promises";
 import path from "path";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
-import { getBlobToken } from "@/lib/storage";
+import { getBlobAuth } from "@/lib/storage";
 
 export type MediaItem = {
   url: string;
@@ -23,12 +23,12 @@ async function requireAdmin() {
 
 export async function listMedia(): Promise<MediaItem[]> {
   await requireAdmin();
-  const token = getBlobToken();
-  if (token) {
+  const blobAuth = getBlobAuth();
+  if (blobAuth) {
     const items: MediaItem[] = [];
     let cursor: string | undefined;
     do {
-      const page = await list({ prefix: "cms/", token, cursor, limit: 1000 });
+      const page = await list({ prefix: "cms/", ...blobAuth, cursor, limit: 1000 });
       for (const b of page.blobs) {
         items.push({
           url: b.url,
@@ -61,10 +61,10 @@ export async function listMedia(): Promise<MediaItem[]> {
 
 export async function deleteMedia(urls: string[]) {
   await requireAdmin();
-  const token = getBlobToken();
-  if (token) {
+  const blobAuth = getBlobAuth();
+  if (blobAuth) {
     const blobUrls = urls.filter((u) => /^https:\/\/[^/]+\.blob\.vercel-storage\.com\//.test(u));
-    if (blobUrls.length) await del(blobUrls, { token });
+    if (blobUrls.length) await del(blobUrls, blobAuth);
   } else {
     for (const url of urls) {
       if (!url.startsWith("/uploads/")) continue;
