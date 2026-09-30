@@ -191,7 +191,7 @@ export function LessonsEditor({ postId, initial }: { postId: string; initial: Le
   return (
     <AdminCard title={`Bài học video (${items.length})`}>
       <p className="mb-4 text-sm text-ink/55">
-        Các bài cùng tên chương sẽ được gộp nhóm. Video hỗ trợ link YouTube, Vimeo hoặc file .mp4 (tải lên ở Thư viện media rồi dán link).
+        Các bài cùng tên chương sẽ được gộp nhóm. Video hỗ trợ link YouTube, Vimeo hoặc file .mp4/.webm (bấm “Tải video lên” trong từng bài, tối đa 200MB).
         Bài đánh dấu “Học thử” xem được khi chưa đăng ký.
       </p>
       <div className="space-y-2">
