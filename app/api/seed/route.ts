@@ -1,4 +1,6 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { invalidateCmsCache } from "@/lib/cache";
 import { main as seed } from "../../../prisma/seed";
 
 /**
@@ -14,6 +16,8 @@ export async function POST(req: Request) {
 
   try {
     await seed();
+    await invalidateCmsCache([]);
+    revalidatePath("/", "layout");
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[seed]", error);
