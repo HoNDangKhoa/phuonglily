@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 export function LoginForm({ callbackUrl = "/admin" }: { callbackUrl?: string }) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -40,7 +42,8 @@ export function LoginForm({ callbackUrl = "/admin" }: { callbackUrl?: string }) 
           name="email"
           type="email"
           required
-          defaultValue="admin@phuonglilyacademy.com"
+          autoComplete="username"
+          defaultValue={isDev ? "admin@phuonglilyacademy.com" : undefined}
         />
       </div>
       <div>
@@ -50,7 +53,8 @@ export function LoginForm({ callbackUrl = "/admin" }: { callbackUrl?: string }) 
           name="password"
           type="password"
           required
-          defaultValue="admin123"
+          autoComplete="current-password"
+          defaultValue={isDev ? "admin123" : undefined}
         />
       </div>
       {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
@@ -61,7 +65,7 @@ export function LoginForm({ callbackUrl = "/admin" }: { callbackUrl?: string }) 
       >
         {loading ? "Đang đăng nhập…" : "Đăng nhập"}
       </Button>
-      {process.env.NODE_ENV !== "production" && (
+      {isDev && (
         <p className="text-xs text-ink/40">
           Demo: admin@phuonglilyacademy.com / admin123
         </p>
