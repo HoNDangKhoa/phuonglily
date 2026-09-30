@@ -22,7 +22,7 @@ export default async function LoginPage({
           </div>
           <div>
             <p className="text-lg font-semibold text-ink">Phương Lily Academy CMS</p>
-            <p className="text-xs text-ink/45">Diamond-style Admin</p>
+            <p className="text-xs text-ink/45">Hệ thống quản trị nội dung</p>
           </div>
         </div>
         <h1 className="text-2xl font-semibold text-ink">Chào mừng trở lại</h1>

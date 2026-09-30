@@ -61,9 +61,11 @@ export function LoginForm({ callbackUrl = "/admin" }: { callbackUrl?: string }) 
       >
         {loading ? "Đang đăng nhập…" : "Đăng nhập"}
       </Button>
-      <p className="text-xs text-ink/40">
-        Demo: admin@phuonglilyacademy.com / admin123
-      </p>
+      {process.env.NODE_ENV !== "production" && (
+        <p className="text-xs text-ink/40">
+          Demo: admin@phuonglilyacademy.com / admin123
+        </p>
+      )}
     </form>
   );
 }

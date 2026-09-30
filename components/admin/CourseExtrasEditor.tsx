@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Plus, Trash2, Upload } from "lucide-react";
 import { AdminCard } from "@/components/admin/AdminChrome";
 import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import { PACKAGE_BADGES, badgeClass, formatVnd } from "@/lib/learning";
@@ -12,6 +12,7 @@ import {
   saveCoursePackages,
   saveLessons,
 } from "@/lib/learning-admin-actions";
+import { uploadAsset } from "@/lib/upload-client";
 import { cn } from "@/lib/utils";
 
 const uid = () => `new_${Math.random().toString(36).slice(2, 9)}`;
@@ -227,7 +228,10 @@ export function LessonsEditor({ postId, initial }: { postId: string; initial: Le
                   </div>
                   <div className="md:col-span-2">
                     <Label>Link video</Label>
-                    <Input value={lesson.videoUrl} placeholder="https://youtu.be/... hoặc https://.../bai-1.mp4" onChange={(e) => update(i, { videoUrl: e.target.value })} />
+                    <div className="flex gap-2">
+                      <Input value={lesson.videoUrl} placeholder="https://youtu.be/... hoặc https://.../bai-1.mp4" onChange={(e) => update(i, { videoUrl: e.target.value })} />
+                      <VideoUploadButton onUploaded={(url) => update(i, { videoUrl: url })} />
+                    </div>
                   </div>
                   <div>
                     <Label>Thời lượng</Label>
@@ -287,5 +291,44 @@ export function LessonsEditor({ postId, initial }: { postId: string; initial: Le
         }
       />
     </AdminCard>
+  );
+}
+
+function VideoUploadButton({ onUploaded }: { onUploaded: (url: string) => void }) {
+  const [progress, setProgress] = useState<number | null>(null);
+  const [error, setError] = useState("");
+
+  return (
+    <div className="shrink-0">
+      <label
+        className={cn(
+          "inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-lg border border-black/10 px-3 text-sm font-semibold whitespace-nowrap hover:border-[#3f7d3a]",
+          progress !== null && "pointer-events-none opacity-60",
+        )}
+      >
+        <Upload size={15} />
+        {progress !== null ? `${Math.round(progress)}%` : "Tải video lên"}
+        <input
+          type="file"
+          accept="video/mp4,video/webm"
+          className="hidden"
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            e.target.value = "";
+            if (!file) return;
+            setError("");
+            setProgress(0);
+            try {
+              onUploaded(await uploadAsset(file, setProgress));
+            } catch (err) {
+              setError(err instanceof Error ? err.message : "Tải video thất bại");
+            } finally {
+              setProgress(null);
+            }
+          }}
+        />
+      </label>
+      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+    </div>
   );
 }

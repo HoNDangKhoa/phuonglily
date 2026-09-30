@@ -163,6 +163,9 @@ export function TipTapEditor({
       table_toolbar:
         "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
       image_title: true,
+      image_advtab: true,
+      image_caption: true,
+      image_dimensions: true,
       automatic_uploads: true,
       paste_data_images: true,
       file_picker_types: "image media",
@@ -188,8 +191,16 @@ export function TipTapEditor({
         input.onchange = async () => {
           const file = input.files?.[0];
           if (!file) return;
-          const url = await uploadImage(file);
-          callback(url, { title: file.name, alt: file.name });
+          try {
+            const url = await uploadImage(file);
+            callback(url, { title: file.name, alt: file.name });
+          } catch (error) {
+            editorRef.current?.notificationManager.open({
+              text: error instanceof Error ? error.message : "Tải file thất bại",
+              type: "error",
+              timeout: 5000,
+            });
+          }
         };
         input.click();
       },
