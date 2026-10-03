@@ -93,7 +93,7 @@ export function SiteHeader({
 
           <nav
             className={cn(
-              "absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border p-1 pl-4 transition-all duration-700 lg:flex lg:p-1.5 lg:pl-5",
+              "absolute top-1/2 left-[calc(50%+1.75rem)] hidden w-max -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border p-1 pl-4 whitespace-nowrap transition-all duration-700 lg:flex lg:p-1.5 lg:pl-5",
               solid
                 ? "border-forest/10 bg-white/85 shadow-[0_12px_40px_-18px_rgba(29,58,31,0.45)] backdrop-blur-xl"
                 : "border-white/55 bg-white/25 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur-md",
@@ -104,7 +104,7 @@ export function SiteHeader({
                 key={link.id}
                 href={link.href}
                 className={cn(
-                  "roll-host relative px-3 py-2 text-[15px] transition-colors lg:px-4",
+                  "roll-host relative shrink-0 px-3 py-2 text-[15px] whitespace-nowrap transition-colors lg:px-3.5",
                   solid ? "text-forest/80 hover:text-forest" : "py-2 text-white/95 hover:text-white lg:py-2.5",
                 )}
               >
@@ -117,7 +117,7 @@ export function SiteHeader({
             <Link
               href={header.ctaHref}
               className={cn(
-                "roll-host ml-2 inline-flex h-10 items-center gap-2.5 rounded-full px-4 text-[15px] font-medium transition-colors duration-500 lg:ml-3 lg:px-5",
+                "roll-host ml-2 inline-flex h-10 shrink-0 items-center gap-2.5 rounded-full px-4 text-[15px] font-medium whitespace-nowrap transition-colors duration-500 lg:ml-3 lg:px-5",
                 solid
                   ? "bg-forest text-white hover:bg-leaf"
                   : "bg-white text-forest hover:bg-white/90 lg:h-[clamp(2.15rem,3.4vw,3.15rem)]",
