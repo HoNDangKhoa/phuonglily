@@ -3,17 +3,18 @@ import { prisma } from "@/lib/prisma";
 
 async function getMailer() {
   const s = await prisma.siteSetting.findUnique({ where: { id: "site_config" } });
-  const host = s?.mailerHost?.trim();
-  const user = s?.mailerEmail?.trim();
-  const pass = s?.mailerPassword?.replace(/\s+/g, "");
-  if (!host || !user || !pass) return null;
-  const secure = s?.mailerSecure === "SSL";
+  const host = s?.mailerHost?.trim() || "smtp.gmail.com";
+  const user = s?.mailerEmail?.trim() || process.env.MAILER_EMAIL?.trim() || "";
+  const pass = (s?.mailerPassword || process.env.MAILER_APP_PASSWORD || "").replace(/\s+/g, "");
+  const secureMode = s?.mailerSecure || "TLS";
+  if (!user || !pass) return null;
+  const secure = secureMode === "SSL";
   const port = Number(s?.mailerPort) || (secure ? 465 : 587);
   const transport = nodemailer.createTransport({
     host,
     port,
     secure,
-    requireTLS: s?.mailerSecure === "TLS",
+    requireTLS: secureMode === "TLS",
     auth: { user, pass },
   });
   return {

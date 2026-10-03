@@ -36,8 +36,9 @@ export default async function AdminSettingsPage() {
         mailerHost: settings?.mailerHost || "smtp.gmail.com",
         mailerPort: settings?.mailerPort || "587",
         mailerSecure: settings?.mailerSecure || "TLS",
-        mailerEmail: settings?.mailerEmail || "",
-        mailerPassword: settings?.mailerPassword || "",
+        mailerEmail: settings?.mailerEmail || process.env.MAILER_EMAIL || "",
+        mailerPassword:
+          settings?.mailerPassword || process.env.MAILER_APP_PASSWORD?.replace(/\s+/g, "") || "",
         slogan: settings?.slogan || "",
         factoryAddress: settings?.factoryAddress || "",
       }}

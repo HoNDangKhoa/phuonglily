@@ -225,6 +225,14 @@ export async function toggleSubscriber(id: string, isActive: boolean) {
   revalidatePath("/admin/newsletter");
 }
 
+async function existingMailerPassword() {
+  const row = await prisma.siteSetting.findUnique({
+    where: { id: "site_config" },
+    select: { mailerPassword: true },
+  });
+  return row?.mailerPassword || null;
+}
+
 export async function saveSiteSettings(formData: FormData) {
   await requireAdmin();
   const text = (key: string) => String(formData.get(key) ?? "").trim() || null;
@@ -256,7 +264,7 @@ export async function saveSiteSettings(formData: FormData) {
     mailerPort: text("mailerPort"),
     mailerSecure: text("mailerSecure"),
     mailerEmail: text("mailerEmail"),
-    mailerPassword: text("mailerPassword"),
+    mailerPassword: text("mailerPassword") ?? (await existingMailerPassword()),
     socialLinks: JSON.stringify({
       facebook: text("fanpage") ?? "",
       fanpage: text("fanpage") ?? "",
