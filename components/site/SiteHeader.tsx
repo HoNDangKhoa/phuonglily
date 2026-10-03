@@ -68,15 +68,15 @@ export function SiteHeader({
       >
         <div
           className={cn(
-            "container-site flex items-center justify-between gap-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
-            solid ? "py-3" : "py-5 md:py-6",
+            "relative mx-auto flex w-full max-w-[1440px] items-center px-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] md:px-10 lg:px-16",
+            solid ? "h-[72px]" : "h-[88px] md:h-[100px]",
           )}
         >
-          <Link href="/" aria-label={siteName} className="relative shrink-0">
+          <Link href="/" aria-label={siteName} className="relative z-10 shrink-0">
             <span
               className={cn(
-                "block overflow-hidden rounded-full ring-2 ring-white/60 transition-all duration-700",
-                solid ? "h-12 w-12 md:h-14 md:w-14" : "h-16 w-16 md:h-[76px] md:w-[76px]",
+                "block overflow-hidden rounded-full ring-2 ring-white/70 transition-all duration-700",
+                solid ? "h-11 w-11 md:h-12 md:w-12" : "h-14 w-14 md:h-16 md:w-16",
               )}
             >
               {logoUrl ? (
@@ -91,10 +91,10 @@ export function SiteHeader({
 
           <nav
             className={cn(
-              "hidden items-center gap-1 rounded-full border p-1.5 pl-6 transition-all duration-700 lg:flex",
+              "absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border p-1.5 pl-5 transition-all duration-700 lg:flex",
               solid
-                ? "border-forest/10 bg-white/80 shadow-[0_12px_40px_-18px_rgba(29,58,31,0.45)] backdrop-blur-xl"
-                : "border-white/30 bg-white/10 backdrop-blur-md",
+                ? "border-forest/10 bg-white/85 shadow-[0_12px_40px_-18px_rgba(29,58,31,0.45)] backdrop-blur-xl"
+                : "border-white/45 bg-white/20 backdrop-blur-md",
             )}
           >
             {header.links.map((link) => (
@@ -124,7 +124,7 @@ export function SiteHeader({
             </Link>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="z-10 ml-auto flex items-center gap-2">
             <Link
               href={accountHref}
               aria-label={student ? "Tài khoản của tôi" : "Đăng nhập"}

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { Play } from "lucide-react";
 import { RollButton, RollText } from "@/components/site/Buttons";
 import { VideoModal } from "@/components/site/VideoModal";
 import { isVideoUrl, type MediaListItem } from "@/lib/branding";
@@ -71,11 +70,11 @@ export function HeroSection({
           </div>
         );
       })}
-      <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/55 via-black/25 to-black/5" />
-      <div className="absolute inset-x-0 bottom-0 z-20 h-40 bg-gradient-to-t from-black/35 to-transparent" />
+      <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/30 via-black/10 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-black/20 to-transparent" />
 
-      <div className="container-site relative z-30 flex h-full flex-col justify-center pt-24">
-        <h1 className="max-w-3xl text-[clamp(2.6rem,6.2vw,5.2rem)] leading-[1.08] font-normal tracking-tight">
+      <div className="relative z-30 mx-auto flex h-full w-full max-w-[1440px] flex-col justify-end px-5 pb-24 md:px-10 md:pb-28 lg:px-16">
+        <h1 className="max-w-[14ch] text-[clamp(2.6rem,4.7vw,4.35rem)] leading-[1.14] font-normal tracking-[-0.02em]">
           {lines.map((line, i) => (
             <span key={i} className="block overflow-hidden pb-[0.06em]">
               <span
@@ -88,13 +87,13 @@ export function HeroSection({
           ))}
         </h1>
         <p
-          className="animate-fade-up mt-6 max-w-xl text-[15px] leading-relaxed text-white/85 md:text-base"
+          className="animate-fade-up mt-5 max-w-md text-sm leading-relaxed text-white/90 md:text-[15px]"
           style={{ animationDelay: "550ms" }}
         >
           {hero.description}
         </p>
         <div
-          className="animate-fade-up mt-9 flex flex-wrap items-center gap-4"
+          className="animate-fade-up mt-8 flex flex-wrap items-center gap-3"
           style={{ animationDelay: "700ms" }}
         >
           <RollButton label={hero.primaryLabel} href={hero.primaryHref || "/khoa-hoc"} />
@@ -103,12 +102,8 @@ export function HeroSection({
             onClick={() => videoUrl && setShowVideo(true)}
             disabled={!videoUrl}
             title={videoUrl ? undefined : "Chưa có video — thêm tại Admin › Video giới thiệu"}
-            className="group inline-flex items-center gap-3 rounded-full border border-white/35 bg-white/15 py-1.5 pr-6 pl-1.5 text-white backdrop-blur-md transition-colors duration-500 hover:bg-white/25 disabled:cursor-not-allowed"
+            className="inline-flex h-12 items-center rounded-full border border-white/45 bg-white/15 px-6 text-white backdrop-blur-md transition-colors duration-500 hover:bg-white/25 disabled:cursor-not-allowed"
           >
-            <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-white text-forest md:h-9 md:w-9">
-              {videoUrl && <span className="absolute inset-0 animate-ping rounded-full bg-white/60" />}
-              <Play size={14} className="relative translate-x-[1px] fill-current" />
-            </span>
             <span className="text-sm font-medium md:text-[15px]">
               <RollText>{hero.videoLabel}</RollText>
             </span>

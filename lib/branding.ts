@@ -77,6 +77,8 @@ export const PAGE_SEO_KEYS = [
   { key: "online", label: "Học online", href: "/admin/seo/online", path: "/hoc-online" },
   { key: "events", label: "Lịch sự kiện", href: "/admin/seo/events", path: "/lich-su-kien" },
   { key: "blog", label: "Blog", href: "/admin/seo/blog", path: "/blog" },
+  { key: "about", label: "Giới thiệu", href: "/admin/seo/about", path: "/gioi-thieu" },
+  { key: "contact", label: "Liên hệ", href: "/admin/seo/contact", path: "/lien-he" },
 ] as const;
 
 export type PageSeoKey = (typeof PAGE_SEO_KEYS)[number]["key"];

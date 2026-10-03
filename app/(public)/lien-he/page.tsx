@@ -6,7 +6,18 @@ import { Reveal } from "@/components/site/Reveal";
 import { programNames } from "@/lib/post-pages";
 import { getSiteSettings } from "@/lib/queries";
 
-export const metadata: Metadata = { title: "Liên hệ" };
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSiteSettings();
+  const seo = s.pageSeo.contact;
+  return {
+    title: seo?.title || "Liên hệ",
+    description: seo?.description || undefined,
+    keywords: seo?.keywords || undefined,
+    alternates: seo?.canonical ? { canonical: seo.canonical } : undefined,
+    robots: seo && !seo.indexable ? { index: false } : undefined,
+    openGraph: seo?.ogImage ? { images: [seo.ogImage] } : undefined,
+  };
+}
 
 type Props = { searchParams: Promise<{ "chuong-trinh"?: string }> };
 

@@ -93,10 +93,13 @@ export const adminNav: AdminNavItem[] = [
     label: "Quản lý SEO page",
     icon: "seo",
     children: [
+      { label: "Trang chủ", href: "/admin/settings" },
       { label: "Khoá học", href: "/admin/seo/courses" },
       { label: "Học online", href: "/admin/seo/online" },
       { label: "Lịch sự kiện", href: "/admin/seo/events" },
       { label: "Blog", href: "/admin/seo/blog" },
+      { label: "Giới thiệu", href: "/admin/seo/about" },
+      { label: "Liên hệ", href: "/admin/seo/contact" },
     ],
   },
   {
