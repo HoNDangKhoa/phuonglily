@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { ScrollTextReveal } from "@/components/site/ScrollTextReveal";
 import { getSiteSettings } from "@/lib/queries";
 import { parseVerification } from "@/lib/site-settings";
 import "./globals.css";
@@ -33,7 +34,10 @@ export default function RootLayout({
   return (
     <html lang="vi" className={`${font.variable} h-full`}>
       <body className="min-h-full">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <ScrollTextReveal />
+        </AuthProvider>
       </body>
     </html>
   );

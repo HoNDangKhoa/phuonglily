@@ -245,9 +245,12 @@ html.lenis body {
 }
 
 /* ---------------- Reveal on scroll ---------------- */
+[data-reveal-word] {
+  color: color-mix(in srgb, currentColor 30%, transparent);
+}
+
 .reveal {
-  opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(18px);
   transition:
     opacity 0.9s var(--ease-out-expo),
     transform 0.9s var(--ease-out-expo);
