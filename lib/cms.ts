@@ -61,6 +61,50 @@ export const POST_TYPE_VIEW_PATH: Record<string, string> = {
   BLOG: "/blog",
 };
 
+/** Trang thật của menu. Admin chỉ được chọn trong danh sách này để không tạo link 404. */
+export const MENU_PAGES = [
+  { href: "/gioi-thieu", label: "Giới thiệu" },
+  { href: "/khoa-hoc", label: "Lớp đào tạo giảng viên" },
+  { href: "/hoc-online", label: "Lớp tập online" },
+  { href: "/lich-su-kien", label: "Lịch sự kiện" },
+  { href: "/blog", label: "Kiến thức Yoga" },
+  { href: "/lien-he", label: "Liên hệ" },
+] as const;
+
+const MENU_ALIAS: Record<string, string> = {
+  "gioi-thieu": "/gioi-thieu",
+  "ve-phuong-lily": "/gioi-thieu",
+  about: "/gioi-thieu",
+  "khoa-hoc": "/khoa-hoc",
+  "lop-dao-tao": "/khoa-hoc",
+  "lop-dao-tao-giao-vien": "/khoa-hoc",
+  "lop-dao-tao-giang-vien": "/khoa-hoc",
+  "hoc-online": "/hoc-online",
+  "lop-tap-online": "/hoc-online",
+  "lich-su-kien": "/lich-su-kien",
+  "su-kien": "/lich-su-kien",
+  blog: "/blog",
+  "kien-thuc-yoga": "/blog",
+  "lien-he": "/lien-he",
+  contact: "/lien-he",
+};
+
+/** Đưa link menu về một trang đang có, kể cả khi admin gõ nhầm slug. */
+export function resolveMenuHref(href: string): string {
+  const raw = href.trim();
+  if (!raw || raw === "#") return "/lien-he";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const path = (raw.startsWith("/") ? raw : `/${raw}`).replace(/\/{2,}/g, "/");
+  const clean = path.split("?")[0]?.split("#")[0]?.replace(/\/+$/, "") || "/";
+  if (clean === "/") return "/";
+  const known = MENU_PAGES.find((page) => clean === page.href || clean.startsWith(`${page.href}/`));
+  if (known || clean.startsWith("/chinh-sach") || clean.startsWith("/tai-khoan") || clean.startsWith("/dang-") || clean.startsWith("/hoc/")) {
+    return path;
+  }
+  const slug = clean.slice(1).toLowerCase();
+  return MENU_ALIAS[slug] ?? "/lien-he";
+}
+
 export function adminSlugToType(slug: string): PostType | null {
   const entry = Object.entries(POST_TYPE_ADMIN_SLUG).find(([, s]) => s === slug);
   return (entry?.[0] as PostType) ?? null;

@@ -14,7 +14,7 @@ export default async function LogoPage() {
       title="Chi tiết Logo"
       initialUrl={banner.logo.url}
       initialVisible={banner.logo.visible}
-      sizeHint="Width: ~180 px - Height: ~60 px (jpg, jpeg, png, gif, webp, svg)"
+      sizeHint="Thiết kế ảnh vuông 400 × 400 px. Header hiển thị 95 × 95 px. Định dạng png hoặc jpg."
     />
   );
 }

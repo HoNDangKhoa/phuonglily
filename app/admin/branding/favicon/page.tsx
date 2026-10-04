@@ -14,7 +14,7 @@ export default async function FaviconPage() {
       title="Chi tiết Favicon"
       initialUrl={banner.favicon.url}
       initialVisible={banner.favicon.visible}
-      sizeHint="Width: 32–64 px - Height: 32–64 px (ico, png)"
+      sizeHint="Thiết kế ảnh vuông 64 × 64 px. Định dạng png hoặc ico."
     />
   );
 }

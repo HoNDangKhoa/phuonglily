@@ -7,13 +7,14 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { AdminCard, AdminPageHeader } from "@/components/admin/AdminChrome";
 import { ImageDropzone, VisibilitySwitch } from "@/components/admin/BrandAssetForm";
 import { SiteIcon } from "@/components/common/SiteIcon";
-import { Input, Label, Textarea } from "@/components/ui/input";
+import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import {
   saveBrandAsset,
   saveHomeSection,
   savePageArticle,
   type HomeSectionKey,
 } from "@/lib/actions";
+import { MENU_PAGES, resolveMenuHref } from "@/lib/cms";
 import { TipTapEditor } from "@/components/editor/TipTapEditor";
 import { isHtml, toRichHtml } from "@/lib/rich-text";
 import {
@@ -363,7 +364,7 @@ export function HeaderEditor({ initial }: { initial: BannerData["header"] }) {
     <SectionForm
       sectionKey="header"
       title="Thanh menu (Header)"
-      description="Menu dạng viên thuốc nổi, tự thu gọn khi cuộn (hiệu ứng header Elaria)."
+      description="Chọn trang có sẵn trong danh mục. Link không gõ tay nên không bị lỗi 404."
       initial={initial}
     >
       {(v, set) => (
@@ -372,13 +373,22 @@ export function HeaderEditor({ initial }: { initial: BannerData["header"] }) {
             <ListEditor
               items={v.links}
               onChange={(links) => set({ ...v, links })}
-              create={() => newLink("nav")}
+              create={() => ({ ...newLink("nav"), href: "/gioi-thieu" })}
               itemTitle={(l) => l.label}
               addLabel="Thêm liên kết"
               render={(l, update) => (
                 <div className="grid gap-3 md:grid-cols-2">
-                  <Field label="Tên" value={l.label} onChange={(label) => update({ label })} />
-                  <Field label="Link" value={l.href} onChange={(href) => update({ href })} />
+                  <Field label="Tên hiển thị" value={l.label} onChange={(label) => update({ label })} />
+                  <div>
+                    <Label>Trang</Label>
+                    <Select value={resolveMenuHref(l.href)} onChange={(e) => update({ href: e.target.value })}>
+                      {MENU_PAGES.map((page) => (
+                        <option key={page.href} value={page.href}>
+                          {page.label}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
               )}
             />
@@ -386,7 +396,16 @@ export function HeaderEditor({ initial }: { initial: BannerData["header"] }) {
           <AdminCard title="Nút liên hệ (bên phải)">
             <div className="grid gap-3 md:grid-cols-2">
               <Field label="Nhãn nút" value={v.ctaLabel} onChange={(ctaLabel) => set({ ...v, ctaLabel })} />
-              <Field label="Link" value={v.ctaHref} onChange={(ctaHref) => set({ ...v, ctaHref })} />
+              <div>
+                <Label>Trang</Label>
+                <Select value={resolveMenuHref(v.ctaHref)} onChange={(e) => set({ ...v, ctaHref: e.target.value })}>
+                  {MENU_PAGES.map((page) => (
+                    <option key={page.href} value={page.href}>
+                      {page.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
             </div>
           </AdminCard>
         </>
@@ -519,7 +538,7 @@ export function RoadmapEditor({ initial }: { initial: BannerData["roadmap"] }) {
               <Field label="Tiêu đề chính" value={v.title} onChange={(title) => set({ ...v, title })} />
             </div>
           </AdminCard>
-          <AdminCard title="Các chương trình (khuyến nghị 5)">
+          <AdminCard title="Lớp đào tạo giảng viên (khuyến nghị 5)">
             <ListEditor
               items={v.items}
               onChange={(items) => set({ ...v, items })}
@@ -534,7 +553,7 @@ export function RoadmapEditor({ initial }: { initial: BannerData["roadmap"] }) {
                     <Field label="Nhãn nút" value={i.ctaLabel} onChange={(ctaLabel) => update({ ctaLabel })} />
                     <Field label="Link nút đăng ký" value={i.ctaHref} onChange={(ctaHref) => update({ ctaHref })} />
                   </div>
-                  <ImageField label="Hình ảnh hiển thị khi mở mục" value={i.imageUrl} onChange={(imageUrl) => update({ imageUrl })} />
+                  <ImageField label="Hình ảnh hiển thị khi mở mục" hint="Thiết kế đúng 1000 × 1120 px (tỉ lệ 1.12:1)." value={i.imageUrl} onChange={(imageUrl) => update({ imageUrl })} />
                 </div>
               )}
             />
@@ -556,7 +575,7 @@ export function FounderEditor({ initial }: { initial: BannerData["founder"] }) {
       {(v, set) => (
         <>
           <AdminCard title="Hình ảnh (bên trái)">
-            <ImageDropzone value={v.imageUrl} onChange={(imageUrl) => set({ ...v, imageUrl })} hint="Khuyến nghị tỉ lệ ~1:1, tối thiểu 1200px" />
+            <ImageDropzone value={v.imageUrl} onChange={(imageUrl) => set({ ...v, imageUrl })} hint="Thiết kế đúng 1200 × 1200 px." />
           </AdminCard>
           <AdminCard title="Nội dung (bên phải)">
             <div className="space-y-3">
@@ -605,7 +624,7 @@ export function AppPromoEditor({ initial }: { initial: BannerData["appPromo"] })
             </div>
           </AdminCard>
           <AdminCard title="Ảnh (bên phải)">
-            <ImageDropzone value={v.imageUrl} onChange={(imageUrl) => set({ ...v, imageUrl })} hint="Ảnh mockup laptop / điện thoại, nền trong suốt càng tốt" />
+            <ImageDropzone value={v.imageUrl} onChange={(imageUrl) => set({ ...v, imageUrl })} hint="Thiết kế đúng 1200 × 720 px. Nền trong suốt càng tốt." />
           </AdminCard>
           <AdminCard title="Avatar học viên">
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -623,7 +642,7 @@ export function AppPromoEditor({ initial }: { initial: BannerData["appPromo"] })
                   </div>
                   <ImageDropzone
                     value={url}
-                    hint="Ảnh vuông"
+                    hint="Thiết kế đúng 200 × 200 px."
                     onChange={(next) => set({ ...v, avatars: v.avatars.map((a, j) => (j === i ? next : a)) })}
                   />
                 </div>
@@ -647,7 +666,7 @@ export function TrainingEditor({ initial }: { initial: BannerData["training"] })
   return (
     <SectionForm
       sectionKey="training"
-      title="Khám phá các nhóm đào tạo"
+      title="Lớp tập online"
       description="6 ô: tên, mô tả, 4 mục tiêu chuẩn và nút Đăng ký ngay (hiệu ứng nút Pawlates)."
       initial={initial}
     >
@@ -692,7 +711,7 @@ export function TrainingEditor({ initial }: { initial: BannerData["training"] })
                     </div>
                     <VisibilitySwitch checked={g.isVisible} onChange={(isVisible) => update({ isVisible })} />
                   </div>
-                  <ImageField label="Hình ảnh" value={g.imageUrl} onChange={(imageUrl) => update({ imageUrl })} />
+                  <ImageField label="Hình ảnh" hint="Thiết kế đúng 1200 × 706 px (tỉ lệ 1.7:1)." value={g.imageUrl} onChange={(imageUrl) => update({ imageUrl })} />
                 </div>
               )}
             />
@@ -714,7 +733,7 @@ export function QuoteEditor({ initial }: { initial: BannerData["quoteCta"] }) {
       {(v, set) => (
         <>
           <AdminCard title="Ảnh nền">
-            <ImageDropzone value={v.imageUrl} onChange={(imageUrl) => set({ ...v, imageUrl })} hint="Khuyến nghị 1920×900" />
+            <ImageDropzone value={v.imageUrl} onChange={(imageUrl) => set({ ...v, imageUrl })} hint="Thiết kế đúng 1920 × 900 px." />
           </AdminCard>
           <AdminCard title="Nội dung">
             <div className="space-y-3">

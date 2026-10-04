@@ -165,10 +165,12 @@ export function MediaListManager({
             <ImageDropzone
               value={editing.imageUrl}
               onChange={(url) => setEditing({ ...editing, imageUrl: url })}
-              {...(kind === "slideshow" && {
-                accept: "image/*,video/mp4,video/webm",
-                hint: "Ảnh (jpg, png, webp) hoặc video mp4/webm — khuyến nghị 1920×1080",
-              })}
+              {...(kind === "slideshow"
+                ? {
+                    accept: "image/*,video/mp4,video/webm",
+                    hint: "Thiết kế đúng 1920 × 1080 px. Ảnh jpg, png, webp hoặc video mp4, webm.",
+                  }
+                : { hint: "Thiết kế đúng 64 × 64 px. Ảnh png nền trong suốt." })}
             />
           </form>
         </AdminCard>

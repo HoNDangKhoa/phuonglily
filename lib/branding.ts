@@ -185,6 +185,12 @@ export function parseBannerData(raw?: string | null): BannerData {
     // Lists the admin may intentionally empty.
     merged.slideshow = Array.isArray(parsed.slideshow) ? parsed.slideshow : base.slideshow;
     merged.socialFooter = Array.isArray(parsed.socialFooter) ? parsed.socialFooter : [];
+    if (merged.roadmap.eyebrow === "Các chương trình đào tạo") {
+      merged.roadmap.eyebrow = "Lớp đào tạo giảng viên";
+    }
+    if (merged.training.title === "Khám phá các nhóm đào tạo") {
+      merged.training.title = "Lớp tập online";
+    }
     return merged;
   } catch {
     return base;

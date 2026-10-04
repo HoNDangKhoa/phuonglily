@@ -1,6 +1,7 @@
 import Script from "next/script";
 import { CustomScripts } from "@/components/common/CustomScripts";
 import { VisitTracker } from "@/components/common/VisitTracker";
+import { ContactDock } from "@/components/site/ContactDock";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
@@ -33,6 +34,7 @@ export default async function PublicLayout({
       <SmoothScroll />
       <VisitTracker />
       <SiteHeader header={settings.header} logoUrl={settings.logoUrl} siteName={settings.name} />
+      <ContactDock phone={settings.hotline || settings.phone} zalo={settings.social.zalo || settings.hotline || settings.phone} />
       <main>{children}</main>
       <SiteFooter settings={settings} />
     </>

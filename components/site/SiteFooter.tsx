@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { resolveMenuHref } from "@/lib/cms";
 import type { SiteSettings } from "@/lib/queries";
 
 function ColumnTitle({ children }: { children: string }) {
@@ -77,7 +78,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           .map(([key, href]) => ({ id: `social-${key}`, label: key, href, imageUrl: "" }));
 
   return (
-    <footer className="bg-sage px-4 pt-6 pb-0 md:px-6 md:pt-8">
+    <footer className="bg-sage px-4 pt-2 pb-0 md:px-6">
       <div className="mx-auto max-w-[1440px] rounded-[28px] bg-white px-7 py-12 text-forest md:px-12 md:py-14 lg:px-16">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           <div>
@@ -85,7 +86,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             <ul className="space-y-3.5 text-sm text-forest/85">
               {pages.map((link) => (
                 <li key={link.id}>
-                  <Link href={link.href} className="transition hover:text-leaf">
+                  <Link href={resolveMenuHref(link.href)} className="transition hover:text-leaf">
                     {link.label}
                   </Link>
                 </li>
@@ -182,14 +183,14 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
         </div>
       </div>
 
-      <div className="pointer-events-none relative mt-2 h-[clamp(3rem,8vw,6.6rem)] overflow-hidden select-none" aria-hidden>
-        <div className="marquee absolute top-0 left-0 items-start [--marquee-duration:36s]">
+      <div className="pointer-events-none relative mt-1 overflow-hidden py-1 select-none" aria-hidden>
+        <div className="marquee items-center [--marquee-duration:36s]">
           {[0, 1].map((dup) => (
             <div key={dup} className="flex shrink-0">
               {Array.from({ length: 3 }, (_, i) => (
                 <span
                   key={i}
-                  className="pr-[0.28em] text-[clamp(4.2rem,12vw,10rem)] leading-none font-semibold tracking-[-0.045em] whitespace-nowrap text-forest/25"
+                  className="pr-[0.28em] text-[clamp(3.2rem,8vw,6.5rem)] leading-none font-semibold tracking-[-0.045em] whitespace-nowrap text-forest/25"
                 >
                   {running}
                 </span>

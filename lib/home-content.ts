@@ -184,7 +184,7 @@ export function defaultAcademy(): AcademyContent {
 export function defaultRoadmap(): RoadmapContent {
   const img = ["/images/class-training.jpg", "/images/yoga-studio.jpg"];
   return {
-    eyebrow: "Các chương trình đào tạo",
+    eyebrow: "Lớp đào tạo giảng viên",
     title: "Lộ trình Yoga toàn diện",
     items: [
       { id: "rm_1", title: "200H - HLV Yoga nền tảng", description: "Xây dựng nền tảng vững chắc để trở thành HLV Yoga", ctaLabel: "Đăng ký", ctaHref: "/lien-he?chuong-trinh=200H", imageUrl: img[0] },
@@ -243,7 +243,7 @@ export function defaultTraining(): TrainingContent {
     "Đào tạo master Yoga",
   ];
   return {
-    title: "Khám phá các nhóm đào tạo",
+    title: "Lớp tập online",
     items: names.map((name, i) => ({
       id: `tg_${i + 1}`,
       name,

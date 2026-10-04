@@ -41,7 +41,7 @@ export function FounderSection({ founder }: { founder: FounderContent }) {
                 delay={200 + i * 100}
                 className="group flex aspect-[1.05/1] flex-col items-center justify-center rounded-2xl bg-sage px-3 text-center shadow-[0_8px_20px_-14px_rgba(29,58,31,0.5)] transition-transform duration-500 hover:-translate-y-1.5"
               >
-                <span className="icon-spin text-forest">
+                <span className="text-forest">
                   <SiteIcon icon={s.icon} iconUrl={s.iconUrl} size={34} />
                 </span>
                 <span className="mt-2 text-base font-medium text-forest">{s.value}</span>

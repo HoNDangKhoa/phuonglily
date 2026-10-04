@@ -192,10 +192,11 @@ export function PostForm({
     }
   }
 
-  const dropHint = useMemo(
-    () => "Width: tự động - Height: tự động (jpg, jpeg, png, gif, webp, pdf, mp4)",
-    [],
-  );
+  const dropHint = useMemo(() => {
+    if (type === "BLOG") return "Thiết kế ảnh 1200 × 700 px (tỉ lệ 1.72:1). Định dạng jpg, png, webp.";
+    if (type === "EVENT") return "Thiết kế ảnh 1200 × 750 px (tỉ lệ 16:10). Định dạng jpg, png, webp.";
+    return "Thiết kế ảnh 1200 × 750 px (tỉ lệ 16:10). Định dạng jpg, png, webp.";
+  }, [type]);
 
   return (
     <form

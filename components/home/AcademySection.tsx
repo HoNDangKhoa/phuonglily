@@ -17,7 +17,7 @@ export function AcademySection({ academy }: { academy: AcademyContent }) {
         <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
           {academy.features.map((f, i) => (
             <Reveal key={f.id} delay={i * 120} className="group cursor-default">
-              <div className="icon-spin inline-flex text-forest">
+              <div className="inline-flex text-forest">
                 <SiteIcon icon={f.icon} iconUrl={f.iconUrl} size={56} />
               </div>
               <h3 className="mt-4 text-[1.6rem] leading-snug font-normal text-forest transition-colors duration-500 group-hover:text-leaf">

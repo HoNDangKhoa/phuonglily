@@ -71,8 +71,8 @@ export function HeroSection({
           </div>
         );
       })}
-      <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/30 via-black/10 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-black/20 to-transparent" />
+      <div className="absolute inset-0 z-20 bg-black/45" />
+      <div className="absolute inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-black/35 to-transparent" />
 
       <div className="relative z-30 mx-auto flex h-full w-full max-w-[1440px] flex-col justify-end px-5 pb-24 md:px-10 md:pb-28 lg:px-16">
         <h1 className="max-w-[14ch] text-[clamp(2.6rem,4.7vw,4.35rem)] leading-[1.14] font-normal tracking-[-0.02em]">

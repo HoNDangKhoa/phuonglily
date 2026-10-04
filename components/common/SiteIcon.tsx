@@ -99,6 +99,8 @@ export function SiteIcon({
       />
     );
   }
-  const Icon = MAP[icon ?? "lotus"] ?? Lotus;
-  return <Icon size={size} strokeWidth={1.4} className={className} />;
+  const key = icon ?? "lotus";
+  const Icon = MAP[key] ?? Lotus;
+  const drawn = key === "lotus" || key === "certificate";
+  return <Icon size={size} strokeWidth={drawn ? 1.4 : 0.75} className={className} />;
 }

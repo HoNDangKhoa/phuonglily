@@ -8,7 +8,7 @@ export function BlogSection({ title, posts }: { title: string; posts: PublicPost
   const moving = posts.length > 3;
 
   return (
-    <section className="bg-sage pb-24">
+    <section className="bg-sage pb-8">
       <div className="container-site">
         <div className="mb-10 border-t border-forest/15 pt-8">
           <Reveal>

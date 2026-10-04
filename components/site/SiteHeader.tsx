@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, UserRound, X } from "lucide-react";
 import { RollText } from "@/components/site/Buttons";
+import { resolveMenuHref } from "@/lib/cms";
 import type { HeaderContent } from "@/lib/home-content";
 import { cn } from "@/lib/utils";
 
@@ -55,8 +56,10 @@ export function SiteHeader({
   }, []);
 
   const solid = scrolled || !overHero;
-  const isActive = (href: string) =>
-    href !== "/" && (pathname === href || pathname.startsWith(`${href}/`));
+  const isActive = (href: string) => {
+    const path = resolveMenuHref(href);
+    return path !== "/" && (pathname === path || pathname.startsWith(`${path}/`));
+  };
 
   return (
     <>
@@ -69,20 +72,18 @@ export function SiteHeader({
         <div
           className={cn(
             "relative mx-auto flex w-full max-w-[1440px] items-center px-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] md:px-8 lg:px-[clamp(1.25rem,5.76vw,5.2rem)]",
-            solid ? "h-[74px]" : "h-[90px] lg:h-auto lg:pt-[clamp(0.875rem,1.56vw,1.525rem)] lg:pb-[18px]",
+            solid ? "h-[74px]" : "h-[119px]",
           )}
         >
           <Link href="/" aria-label={siteName} className="relative z-10 shrink-0">
             <span
               className={cn(
                 "relative block overflow-hidden rounded-full ring-2 ring-white/70 transition-all duration-700",
-                solid
-                  ? "size-12 md:size-[3.25rem]"
-                  : "size-[4.75rem] lg:size-[clamp(5.75rem,8.9vw,8rem)]",
+                solid ? "size-11" : "size-[95px]",
               )}
             >
               {logoUrl ? (
-                <Image src={logoUrl} alt={siteName} fill sizes="128px" className="rounded-full object-cover" priority />
+                <Image src={logoUrl} alt={siteName} fill sizes="95px" className="rounded-full object-cover" priority />
               ) : (
                 <span className="flex h-full w-full items-center justify-center bg-leaf text-sm font-semibold text-white">
                   PL
@@ -102,7 +103,7 @@ export function SiteHeader({
             {header.links.map((link) => (
               <Link
                 key={link.id}
-                href={link.href}
+                href={resolveMenuHref(link.href)}
                 className={cn(
                   "roll-host relative shrink-0 px-3 py-2 text-[15px] whitespace-nowrap transition-colors lg:px-3.5",
                   solid ? "text-forest/80 hover:text-forest" : "py-2 text-white/95 hover:text-white lg:py-2.5",
@@ -115,7 +116,7 @@ export function SiteHeader({
               </Link>
             ))}
             <Link
-              href={header.ctaHref}
+              href={resolveMenuHref(header.ctaHref)}
               className={cn(
                 "roll-host ml-2 inline-flex h-10 shrink-0 items-center gap-2.5 rounded-full px-4 text-[15px] font-medium whitespace-nowrap transition-colors duration-500 lg:ml-3 lg:px-5",
                 solid
@@ -134,8 +135,8 @@ export function SiteHeader({
               aria-label={student ? "Tài khoản của tôi" : "Đăng nhập"}
               title={student ? student.email : "Đăng nhập / Đăng ký"}
               className={cn(
-                "hidden h-11 w-11 items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 lg:flex",
-                !solid && "lg:h-[clamp(2.5rem,4.3vw,3.9rem)] lg:w-[clamp(2.5rem,4.3vw,3.9rem)]",
+                "hidden items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 lg:flex",
+                solid ? "size-11" : "size-12",
                 student
                   ? "border-transparent bg-leaf text-base font-semibold text-white"
                   : solid
@@ -175,7 +176,7 @@ export function SiteHeader({
           {header.links.map((link, i) => (
             <Link
               key={link.id}
-              href={link.href}
+              href={resolveMenuHref(link.href)}
               className={cn(
                 "border-b border-forest/10 py-4 text-3xl font-light text-forest transition-all duration-700",
                 open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
@@ -194,7 +195,7 @@ export function SiteHeader({
           {student ? `Tài khoản (${student.name || student.email})` : "Đăng nhập / Đăng ký"}
         </Link>
         <Link
-          href={header.ctaHref}
+          href={resolveMenuHref(header.ctaHref)}
           className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-forest py-4 text-lg text-white"
         >
           {header.ctaLabel}
