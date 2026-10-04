@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { RichText } from "@/components/common/RichText";
 import { CircleArrow, PawButton } from "@/components/site/Buttons";
 import { Reveal } from "@/components/site/Reveal";
 import type { RoadmapContent } from "@/lib/home-content";
@@ -62,7 +63,7 @@ export function RoadmapSection({ roadmap }: { roadmap: RoadmapContent }) {
                   <div className="collapse-grid" data-open={open}>
                     <div>
                       <div className="pb-5 pl-14 md:pl-[4.5rem]">
-                        <p className="text-sm text-forest/75">{item.description}</p>
+                        <RichText text={item.description} className="text-sm text-forest/75" />
                         <PawButton
                           label={item.ctaLabel || "Đăng ký"}
                           href={item.ctaHref || "/lien-he"}

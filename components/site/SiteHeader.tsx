@@ -69,7 +69,7 @@ export function SiteHeader({
         <div
           className={cn(
             "relative mx-auto flex w-full max-w-[1440px] items-center px-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] md:px-8 lg:px-[clamp(1.25rem,5.76vw,5.2rem)]",
-            solid ? "h-[72px]" : "h-[88px] lg:h-auto lg:pt-[clamp(0.75rem,1.56vw,1.4rem)] lg:pb-4",
+            solid ? "h-[74px]" : "h-[90px] lg:h-auto lg:pt-[clamp(0.875rem,1.56vw,1.525rem)] lg:pb-[18px]",
           )}
         >
           <Link href="/" aria-label={siteName} className="relative z-10 shrink-0">
@@ -77,12 +77,12 @@ export function SiteHeader({
               className={cn(
                 "relative block overflow-hidden rounded-full ring-2 ring-white/70 transition-all duration-700",
                 solid
-                  ? "h-11 w-11 md:h-12 md:w-12"
-                  : "h-14 w-14 lg:h-[clamp(4rem,6.64vw,6rem)] lg:w-[clamp(4rem,6.64vw,6rem)]",
+                  ? "size-12 md:size-[3.25rem]"
+                  : "size-[4.75rem] lg:size-[clamp(5.75rem,8.9vw,8rem)]",
               )}
             >
               {logoUrl ? (
-                <Image src={logoUrl} alt={siteName} fill sizes="96px" className="rounded-full object-cover" priority />
+                <Image src={logoUrl} alt={siteName} fill sizes="128px" className="rounded-full object-cover" priority />
               ) : (
                 <span className="flex h-full w-full items-center justify-center bg-leaf text-sm font-semibold text-white">
                   PL
@@ -93,7 +93,7 @@ export function SiteHeader({
 
           <nav
             className={cn(
-              "absolute top-1/2 left-[calc(50%+1.75rem)] hidden w-max -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border p-1 pl-4 whitespace-nowrap transition-all duration-700 lg:flex lg:p-1.5 lg:pl-5",
+              "absolute top-1/2 left-[calc(50%+1.75rem)] hidden w-max -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border py-[5px] pr-1 pl-4 whitespace-nowrap transition-all duration-700 lg:flex lg:py-[7px] lg:pr-1.5 lg:pl-5",
               solid
                 ? "border-forest/10 bg-white/85 shadow-[0_12px_40px_-18px_rgba(29,58,31,0.45)] backdrop-blur-xl"
                 : "border-white/55 bg-white/25 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur-md",

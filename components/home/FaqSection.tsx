@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { RichText } from "@/components/common/RichText";
 import { Reveal } from "@/components/site/Reveal";
 import type { FaqContent } from "@/lib/home-content";
 import { cn } from "@/lib/utils";
@@ -20,7 +21,7 @@ export function FaqSection({ faq }: { faq: FaqContent }) {
               </span>
             ))}
           </h2>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-forest/75">{faq.description}</p>
+          <RichText text={faq.description} className="mt-5 max-w-sm text-sm leading-relaxed text-forest/75" />
         </Reveal>
 
         <div className="border-t border-forest/10">

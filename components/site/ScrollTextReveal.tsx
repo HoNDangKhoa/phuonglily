@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-const BLOCKS = "h1,h2,h3,h4,p,blockquote,figcaption,li,button span";
+const BLOCKS = "h1,h2,h3,h4";
 
 /**
  * Scroll-linked text reveal, in the style of Framer's Reveal Text:
@@ -44,7 +44,6 @@ export function ScrollTextReveal() {
       if (skipped(el) || !isLeaf(el)) return;
       const text = el.textContent?.trim() ?? "";
       if (text.length < 2 || !/[A-Za-zÀ-ỹ0-9]/.test(text)) return;
-      if (el.matches("button span") && text.length < 8) return;
 
       const byChar = el.closest("h1") != null && text.length <= 80;
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);

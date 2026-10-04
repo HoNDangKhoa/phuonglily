@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { RollButton, RollText } from "@/components/site/Buttons";
 import { VideoModal } from "@/components/site/VideoModal";
+import { RichText } from "@/components/common/RichText";
 import { isVideoUrl, type MediaListItem } from "@/lib/branding";
 import type { HeroContent } from "@/lib/home-content";
 import { cn } from "@/lib/utils";
@@ -86,12 +87,9 @@ export function HeroSection({
             </span>
           ))}
         </h1>
-        <p
-          className="animate-fade-up mt-5 max-w-md text-sm leading-relaxed text-white/90 md:text-[15px]"
-          style={{ animationDelay: "550ms" }}
-        >
-          {hero.description}
-        </p>
+        <div className="animate-fade-up mt-5 max-w-md" style={{ animationDelay: "550ms" }} data-no-reveal>
+          <RichText text={hero.description} className="text-sm leading-relaxed text-white/90 md:text-[15px]" />
+        </div>
         <div
           className="animate-fade-up mt-8 flex flex-wrap items-center gap-3"
           style={{ animationDelay: "700ms" }}

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { RichText } from "@/components/common/RichText";
 import { SiteIcon } from "@/components/common/SiteIcon";
 import { Reveal } from "@/components/site/Reveal";
 import type { FounderContent } from "@/lib/home-content";
@@ -30,11 +31,7 @@ export function FounderSection({ founder }: { founder: FounderContent }) {
             </h2>
           </Reveal>
           <Reveal delay={120}>
-            <div className="mt-8 space-y-1 text-[15px] leading-relaxed text-forest/70">
-              {founder.content.split("\n").filter(Boolean).map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
+            <RichText text={founder.content} className="mt-8 space-y-1 text-[15px] leading-relaxed text-forest/70" />
           </Reveal>
 
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-8">

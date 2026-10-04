@@ -15,6 +15,7 @@ import {
   Video,
 } from "lucide-react";
 import { HtmlContent } from "@/components/common/HtmlContent";
+import { RichText } from "@/components/common/RichText";
 import { CourseCard } from "@/components/course/CourseCard";
 import { CourseGrid } from "@/components/course/CourseGrid";
 import { EnrollCard } from "@/components/course/EnrollCard";
@@ -28,6 +29,7 @@ import {
 } from "@/lib/course-queries";
 import { groupByChapter } from "@/lib/learning";
 import { incrementPostViews } from "@/lib/queries";
+import { stripHtml } from "@/lib/rich-text";
 
 const INTRO: Record<LearnableType, string> = {
   COURSE: "Các chương trình đào tạo HLV và Yoga chuyên sâu theo lộ trình toàn diện.",
@@ -54,7 +56,7 @@ export async function courseDetailMetadata(type: LearnableType, slug: string): P
   if (!post) return {};
   return {
     title: post.metaTitle || post.title,
-    description: post.metaDescription || post.summary || undefined,
+    description: post.metaDescription || stripHtml(post.summary) || undefined,
     keywords: post.seoKeywords || undefined,
     alternates: post.canonicalUrl ? { canonical: post.canonicalUrl } : undefined,
     openGraph: post.thumbnail ? { images: [post.thumbnail] } : undefined,
@@ -120,7 +122,7 @@ export async function CourseDetailPage({ type, slug }: { type: LearnableType; sl
                 </span>
               )}
               <h2 className="mt-6 text-xl font-medium text-forest">Giới thiệu</h2>
-              {post.summary && <p className="mt-3 leading-relaxed text-forest/75">{post.summary}</p>}
+              <RichText text={post.summary} className="mt-3 leading-relaxed text-forest/75" />
 
               {facts.length > 0 && (
                 <dl className="mt-6 grid gap-4 sm:grid-cols-2">

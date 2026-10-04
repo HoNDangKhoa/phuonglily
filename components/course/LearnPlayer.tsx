@@ -16,6 +16,7 @@ import {
   PlayCircle,
   X,
 } from "lucide-react";
+import { RichText } from "@/components/common/RichText";
 import { toEmbedUrl } from "@/lib/branding";
 import { groupByChapter, progressPercent } from "@/lib/learning";
 import { markLessonViewed, setLessonCompleted } from "@/lib/student-actions";
@@ -296,7 +297,7 @@ export function LearnPlayer({
               {current.description && !current.locked && (
                 <div className="mt-8 rounded-[20px] bg-white p-6">
                   <p className="mb-3 font-medium text-forest">Mô tả bài học</p>
-                  <p className="leading-relaxed whitespace-pre-line text-forest/75">{current.description}</p>
+                  <RichText text={current.description} className="leading-relaxed text-forest/75" />
                 </div>
               )}
               {hasAccess && percent === 100 && (

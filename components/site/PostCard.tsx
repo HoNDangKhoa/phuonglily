@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CalendarDays, ChevronRight, Clock, MapPin } from "lucide-react";
 import { POST_TYPE_VIEW_PATH } from "@/lib/cms";
+import { stripHtml } from "@/lib/rich-text";
 import type { PublicPost } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +44,9 @@ export function PostCard({ post, className }: { post: PublicPost; className?: st
           </span>
         )}
         <h3 className="mt-3 text-lg leading-snug font-normal text-forest md:text-xl">{post.title}</h3>
-        {post.summary && <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-forest/60">{post.summary}</p>}
+        {post.summary && (
+          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-forest/60">{stripHtml(post.summary)}</p>
+        )}
         {!isBlog && (
           <div className="mt-3 space-y-1 text-xs text-forest/70">
             {post.eventDate && (

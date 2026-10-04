@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PlayCircle } from "lucide-react";
 import { POST_TYPE_VIEW_PATH } from "@/lib/cms";
+import { stripHtml } from "@/lib/rich-text";
 import type { CourseCard as CourseCardData } from "@/lib/course-queries";
 import { discountPercent, formatVnd } from "@/lib/learning";
 
@@ -48,7 +49,7 @@ export function CourseCard({ course }: { course: CourseCardData }) {
               <PlayCircle size={14} /> Bao gồm {course.lessonCount} bài học
             </span>
           ) : (
-            course.summary && <span className="line-clamp-1">{course.summary}</span>
+            course.summary && <span className="line-clamp-1">{stripHtml(course.summary)}</span>
           )}
         </div>
         <div className="mt-auto flex items-baseline gap-2.5 pt-4">

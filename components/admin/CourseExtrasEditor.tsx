@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { ArrowDown, ArrowUp, Plus, Trash2, Upload } from "lucide-react";
 import { AdminCard } from "@/components/admin/AdminChrome";
-import { Input, Label, Select, Textarea } from "@/components/ui/input";
+import { TipTapEditor } from "@/components/editor/TipTapEditor";
+import { Input, Label, Select } from "@/components/ui/input";
+import { isHtml, toRichHtml } from "@/lib/rich-text";
 import { PACKAGE_BADGES, badgeClass, formatVnd } from "@/lib/learning";
 import {
   type LessonInput,
@@ -243,7 +245,11 @@ export function LessonsEditor({ postId, initial }: { postId: string; initial: Le
                   </label>
                   <div className="md:col-span-2">
                     <Label>Mô tả bài học</Label>
-                    <Textarea rows={3} value={lesson.description} onChange={(e) => update(i, { description: e.target.value })} />
+                    <TipTapEditor
+                      height={220}
+                      value={isHtml(lesson.description) ? lesson.description : toRichHtml(lesson.description)}
+                      onChange={(description) => update(i, { description })}
+                    />
                   </div>
                 </div>
               )}

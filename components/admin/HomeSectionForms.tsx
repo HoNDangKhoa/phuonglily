@@ -15,13 +15,13 @@ import {
   type HomeSectionKey,
 } from "@/lib/actions";
 import { TipTapEditor } from "@/components/editor/TipTapEditor";
+import { isHtml, toRichHtml } from "@/lib/rich-text";
 import {
   PAGE_ARTICLE_CONFIG,
   defaultPageArticle,
   type PageArticle,
   type PageArticleKey,
 } from "@/lib/page-articles";
-import { toRichHtml } from "@/lib/rich-text";
 import type { BannerData, BrandAsset } from "@/lib/branding";
 import { ICON_OPTIONS, type IconKey } from "@/lib/icon-keys";
 import {
@@ -156,6 +156,7 @@ function Field({
   placeholder,
   hint,
   multiline,
+  rich,
   rows = 3,
   type,
 }: {
@@ -165,13 +166,23 @@ function Field({
   placeholder?: string;
   hint?: string;
   multiline?: boolean;
+  rich?: boolean;
   rows?: number;
   type?: string;
 }) {
+  const text = String(value ?? "");
   return (
     <div>
       <Label>{label}</Label>
-      {multiline ? (
+      {rich ? (
+        <div className="mt-1">
+          <TipTapEditor
+            height={rows > 4 ? 360 : 240}
+            value={isHtml(text) ? text : toRichHtml(text)}
+            onChange={onChange}
+          />
+        </div>
+      ) : multiline ? (
         <Textarea
           rows={rows}
           value={value}
@@ -413,7 +424,7 @@ export function HeroEditor({
               />
               <Field
                 label="Mô tả"
-                multiline
+                rich
                 value={v.description}
                 onChange={(description) => set({ ...v, description })}
               />
@@ -468,7 +479,7 @@ export function AcademyEditor({ initial }: { initial: BannerData["academy"] }) {
           <AdminCard title="Tiêu đề section">
             <div className="space-y-3">
               <Field label="Tiêu đề" value={v.title} onChange={(title) => set({ ...v, title })} />
-              <Field label="Nội dung" multiline value={v.description} onChange={(description) => set({ ...v, description })} />
+              <Field label="Nội dung" rich value={v.description} onChange={(description) => set({ ...v, description })} />
             </div>
           </AdminCard>
           <AdminCard title="Các mục (khuyến nghị 3)">
@@ -481,7 +492,7 @@ export function AcademyEditor({ initial }: { initial: BannerData["academy"] }) {
                 <div className="space-y-3">
                   <IconPicker icon={f.icon} iconUrl={f.iconUrl} onChange={update} />
                   <Field label="Tiêu đề" value={f.title} onChange={(title) => update({ title })} />
-                  <Field label="Nội dung" multiline value={f.description} onChange={(description) => update({ description })} />
+                  <Field label="Nội dung" rich value={f.description} onChange={(description) => update({ description })} />
                 </div>
               )}
             />
@@ -519,7 +530,7 @@ export function RoadmapEditor({ initial }: { initial: BannerData["roadmap"] }) {
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="space-y-3">
                     <Field label="Tiêu đề" value={i.title} onChange={(title) => update({ title })} />
-                    <Field label="Nội dung" multiline value={i.description} onChange={(description) => update({ description })} />
+                    <Field label="Nội dung" rich value={i.description} onChange={(description) => update({ description })} />
                     <Field label="Nhãn nút" value={i.ctaLabel} onChange={(ctaLabel) => update({ ctaLabel })} />
                     <Field label="Link nút đăng ký" value={i.ctaHref} onChange={(ctaHref) => update({ ctaHref })} />
                   </div>
@@ -550,7 +561,7 @@ export function FounderEditor({ initial }: { initial: BannerData["founder"] }) {
           <AdminCard title="Nội dung (bên phải)">
             <div className="space-y-3">
               <Field label="Tiêu đề (xuống dòng để ngắt hàng)" multiline rows={2} value={v.title} onChange={(title) => set({ ...v, title })} />
-              <Field label="Nội dung" multiline rows={8} value={v.content} onChange={(content) => set({ ...v, content })} />
+              <Field label="Nội dung" rich rows={8} value={v.content} onChange={(content) => set({ ...v, content })} />
             </div>
           </AdminCard>
           <AdminCard title="Các mục tiêu biểu">
@@ -656,7 +667,7 @@ export function TrainingEditor({ initial }: { initial: BannerData["training"] })
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="space-y-3">
                     <Field label="Tên" value={g.name} onChange={(name) => update({ name })} />
-                    <Field label="Mô tả" value={g.description} onChange={(description) => update({ description })} />
+                    <Field label="Mô tả" rich value={g.description} onChange={(description) => update({ description })} />
                     <div>
                       <Label>4 mục tiêu chuẩn</Label>
                       <div className="space-y-2">
@@ -733,7 +744,7 @@ export function FaqEditor({ initial }: { initial: BannerData["faq"] }) {
           <AdminCard title="Tiêu đề section">
             <div className="space-y-3">
               <Field label="Tiêu đề" multiline rows={2} value={v.title} onChange={(title) => set({ ...v, title })} />
-              <Field label="Mô tả" multiline value={v.description} onChange={(description) => set({ ...v, description })} />
+              <Field label="Mô tả" rich value={v.description} onChange={(description) => set({ ...v, description })} />
             </div>
           </AdminCard>
           <AdminCard title="Câu hỏi (khuyến nghị 5)">
@@ -787,7 +798,7 @@ export function FooterEditor({ initial }: { initial: BannerData["footer"] }) {
     <SectionForm
       sectionKey="footer"
       title="Footer"
-      description="Footer theo giao diện; dòng chữ Phuong Lily Academy chạy liên tục."
+      description="Ba cột Học viện, Chương trình và Liên hệ. Dòng chữ phuonglilyacademy chạy và chìm ở đáy footer."
       initial={initial}
     >
       {(v, set) => (
@@ -829,7 +840,7 @@ export function FooterEditor({ initial }: { initial: BannerData["footer"] }) {
           <AdminCard title="Đăng ký nhận tin">
             <div className="space-y-3">
               <Field label="Tiêu đề" value={v.newsletterTitle} onChange={(newsletterTitle) => set({ ...v, newsletterTitle })} />
-              <Field label="Mô tả" multiline value={v.newsletterDescription} onChange={(newsletterDescription) => set({ ...v, newsletterDescription })} />
+              <Field label="Mô tả" rich value={v.newsletterDescription} onChange={(newsletterDescription) => set({ ...v, newsletterDescription })} />
               <Field label="Placeholder ô email" value={v.newsletterPlaceholder} onChange={(newsletterPlaceholder) => set({ ...v, newsletterPlaceholder })} />
             </div>
           </AdminCard>

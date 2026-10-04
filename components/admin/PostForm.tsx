@@ -15,6 +15,7 @@ import {
   POST_TYPE_LIST_PATH,
   slugify,
 } from "@/lib/cms";
+import { toRichHtml } from "@/lib/rich-text";
 import { uploadAsset } from "@/lib/upload-client";
 import { cn } from "@/lib/utils";
 
@@ -66,7 +67,7 @@ export function PostForm({
   const [title, setTitle] = useState(initial?.title || "");
   const [slug, setSlug] = useState(initial?.slug || "");
   const [syncSlug, setSyncSlug] = useState(initial?.syncSlugFromTitle ?? !initial?.id);
-  const [summary, setSummary] = useState(initial?.summary || "");
+  const [summary, setSummary] = useState(toRichHtml(initial?.summary));
   const [contentHtml, setContentHtml] = useState(initial?.contentHtml || "");
   const [thumbnail, setThumbnail] = useState(initial?.thumbnail || "");
   const [tags, setTags] = useState(initial?.tags || "");
@@ -213,7 +214,7 @@ export function PostForm({
           formRef.current?.reset();
           setTitle(initial?.title || "");
           setSlug(initial?.slug || "");
-          setSummary(initial?.summary || "");
+          setSummary(toRichHtml(initial?.summary));
           setContentHtml(initial?.contentHtml || "");
           setThumbnail(initial?.thumbnail || "");
           setTags(initial?.tags || "");
@@ -294,11 +295,9 @@ export function PostForm({
           </div>
           <div>
             <Label>Mô tả (vi):</Label>
-            <Textarea
-              rows={4}
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-            />
+            <div className="mt-1">
+              <TipTapEditor value={summary} onChange={setSummary} height={260} />
+            </div>
           </div>
           <div>
             <Label>Nội dung (vi):</Label>

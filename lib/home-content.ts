@@ -304,7 +304,7 @@ export function defaultFooter(): FooterContent {
     newsletterDescription:
       "Hãy đăng ký để nhận các lời khuyên thiết thực, thông tin chuyên sâu về tập luyện và các công cụ hỗ trợ hành trình rèn luyện thể chất của bạn.",
     newsletterPlaceholder: "Hãy nhập email của bạn",
-    wordmark: "Phuong Lily Academy",
+    wordmark: "phuonglilyacademy",
   };
 }
 

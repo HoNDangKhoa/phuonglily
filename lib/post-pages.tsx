@@ -1,4 +1,5 @@
 import { HtmlContent } from "@/components/common/HtmlContent";
+import { stripHtml } from "@/lib/rich-text";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -84,7 +85,7 @@ export async function detailMetadata(type: PostType, slug: string): Promise<Meta
   if (!post) return {};
   return {
     title: post.metaTitle || post.title,
-    description: post.metaDescription || post.summary || undefined,
+    description: post.metaDescription || stripHtml(post.summary) || undefined,
     keywords: post.seoKeywords || undefined,
     alternates: post.canonicalUrl ? { canonical: post.canonicalUrl } : undefined,
     openGraph: post.thumbnail ? { images: [post.thumbnail] } : undefined,

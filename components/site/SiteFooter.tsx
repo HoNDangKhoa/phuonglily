@@ -1,115 +1,156 @@
 import Image from "next/image";
 import Link from "next/link";
+import { RichText } from "@/components/common/RichText";
 import { NewsletterForm } from "@/components/site/NewsletterForm";
 import type { SiteSettings } from "@/lib/queries";
 
-function Lines({ text }: { text: string }) {
-  return (
-    <>
-      {text.split("\n").map((line, i) => (
-        <span key={i} className="block">
-          {line}
-        </span>
-      ))}
-    </>
-  );
+function ColumnTitle({ children }: { children: string }) {
+  return <p className="mb-4 text-sm font-medium tracking-wide text-forest">{children}</p>;
 }
 
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
   const f = settings.footer;
-  const websiteHref = /^https?:\/\//.test(f.website) ? f.website : `https://${f.website}`;
-  const words = Array.from({ length: 4 }, () => f.wordmark);
+  const phone = f.phone || settings.hotline || settings.phone;
+  const email = f.email || settings.email;
+  const address = f.address || settings.headOffice;
+  const website = f.website || settings.website;
+  const websiteHref = website
+    ? /^https?:\/\//.test(website)
+      ? website
+      : `https://${website}`
+    : "";
+  const pages = [
+    ...settings.header.links,
+    { id: "footer-cta", label: settings.header.ctaLabel, href: settings.header.ctaHref },
+  ].filter((link) => link.label && link.href);
+  const programs = settings.training.items.filter((item) => item.isVisible !== false && item.name);
+  const running = (f.wordmark || "phuonglilyacademy").replace(/\s+/g, "").toLowerCase() || "phuonglilyacademy";
 
   return (
     <footer className="relative overflow-hidden bg-olive text-forest">
-      <div className="container-site grid gap-10 pt-16 pb-10 md:grid-cols-12 md:pt-20">
-        <div className="text-[15px] md:col-span-2">
-          <Lines text={f.copyright} />
-        </div>
-
-        <div className="space-y-8 md:col-span-3">
-          <div>
-            <p className="mb-4 text-sm tracking-wide">{f.contactTitle}</p>
-            <ul className="space-y-3 text-sm text-forest/85">
-              {f.phone && (
-                <li>
-                  <a href={`tel:${f.phone.replace(/\s+/g, "")}`} className="transition hover:text-forest">
-                    {f.phone}
-                  </a>
-                </li>
-              )}
-              {f.email && (
-                <li>
-                  <a href={`mailto:${f.email}`} className="transition hover:text-forest">
-                    {f.email}
-                  </a>
-                </li>
-              )}
-              {f.website && (
-                <li>
-                  <a href={websiteHref} className="transition hover:text-forest">
-                    {f.website}
-                  </a>
-                </li>
-              )}
-            </ul>
-          </div>
-          <div>
-            <p className="mb-4 text-sm tracking-wide">{f.addressTitle}</p>
-            <p className="text-sm text-forest/85">{f.address}</p>
-          </div>
-        </div>
-
-        <div className="md:col-span-3">
-          <p className="mb-4 text-sm tracking-wide">{f.policyTitle}</p>
-          <ul className="space-y-3 text-sm text-forest/85">
-            {f.policies.map((p) => (
-              <li key={p.id}>
-                <Link href={p.href || "#"} className="group inline-flex items-center gap-1 transition hover:text-forest">
-                  <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 group-hover:bg-[length:100%_1px]">
-                    {p.label}
-                  </span>
+      <div className="container-site grid gap-12 pt-16 pb-10 md:grid-cols-2 md:pt-20 lg:grid-cols-12">
+        <div className="lg:col-span-3">
+          <ColumnTitle>Học viện</ColumnTitle>
+          <ul className="space-y-3 text-sm text-forest/80">
+            {pages.map((link) => (
+              <li key={link.id}>
+                <Link href={link.href} className="transition hover:text-forest">
+                  {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-          {settings.socialFooter.length > 0 && (
-            <div className="mt-8 flex flex-wrap gap-2">
-              {settings.socialFooter.map((s) => (
-                <a
-                  key={s.id}
-                  href={s.link || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={s.title}
-                  className="relative h-9 w-9 overflow-hidden rounded-full bg-white/40 transition hover:-translate-y-0.5 hover:bg-white/70"
-                >
-                  {s.imageUrl && <Image src={s.imageUrl} alt={s.title} fill sizes="36px" className="object-contain p-2" />}
-                </a>
-              ))}
-            </div>
-          )}
         </div>
 
-        <div className="md:col-span-4">
-          <div className="rounded-3xl border border-white/30 bg-lime p-6 shadow-[0_20px_50px_-30px_rgba(29,58,31,0.6)] md:p-7">
-            <p className="text-[15px] font-medium tracking-wide">{f.newsletterTitle}</p>
-            <p className="mt-3 text-sm leading-relaxed text-forest/80">{f.newsletterDescription}</p>
+        <div className="lg:col-span-4">
+          <ColumnTitle>Chương trình</ColumnTitle>
+          <ul className="space-y-3 text-sm text-forest/80">
+            {programs.map((item) => (
+              <li key={item.id}>
+                <Link href={item.ctaHref || "/khoa-hoc"} className="transition hover:text-forest">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="lg:col-span-5">
+          <ColumnTitle>{f.contactTitle || "Liên hệ"}</ColumnTitle>
+          <ul className="space-y-2.5 text-sm text-forest/80">
+            {phone && (
+              <li>
+                <span className="block text-xs tracking-wide text-forest/55">Điện thoại</span>
+                <a href={`tel:${phone.replace(/\s+/g, "")}`} className="transition hover:text-forest">
+                  {phone}
+                </a>
+              </li>
+            )}
+            {email && (
+              <li>
+                <span className="block text-xs tracking-wide text-forest/55">Email</span>
+                <a href={`mailto:${email}`} className="transition hover:text-forest">
+                  {email}
+                </a>
+              </li>
+            )}
+            {settings.workingHours && (
+              <li>
+                <span className="block text-xs tracking-wide text-forest/55">Giờ làm việc</span>
+                <span>{settings.workingHours}</span>
+              </li>
+            )}
+            {website && (
+              <li>
+                <a href={websiteHref} className="transition hover:text-forest">
+                  {website}
+                </a>
+              </li>
+            )}
+            {address && (
+              <li>
+                <span className="block text-xs tracking-wide text-forest/55">{f.addressTitle || "Địa chỉ"}</span>
+                <span>{address}</span>
+              </li>
+            )}
+          </ul>
+          <div className="mt-6 max-w-md">
+            <p className="text-sm font-medium">{f.newsletterTitle}</p>
+            <RichText text={f.newsletterDescription} className="mt-2 text-sm leading-relaxed text-forest/75" />
             <NewsletterForm placeholder={f.newsletterPlaceholder} />
           </div>
         </div>
       </div>
 
-      <div className="marquee-pause mt-6 select-none md:mt-12" aria-label={f.wordmark}>
-        <div className="marquee [--marquee-duration:38s]" aria-hidden>
+      <div className="container-site border-t border-forest/15 py-6">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
+            {settings.logoUrl && (
+              <span className="relative block h-11 w-11 overflow-hidden rounded-full bg-white/50">
+                <Image src={settings.logoUrl} alt="" fill sizes="44px" className="object-cover" />
+              </span>
+            )}
+            <div>
+              <p className="text-sm font-medium">{settings.name}</p>
+              {address && <p className="mt-0.5 max-w-sm text-xs leading-relaxed text-forest/70">{address}</p>}
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-forest/75">
+            <span className="whitespace-pre-line">{f.copyright}</span>
+            {f.policies.map((p) => (
+              <Link key={p.id} href={p.href || "#"} className="transition hover:text-forest">
+                {p.label}
+              </Link>
+            ))}
+            {settings.socialFooter.map((s) => (
+              <a
+                key={s.id}
+                href={s.link || "#"}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={s.title}
+                className="relative h-8 w-8 overflow-hidden rounded-full bg-white/40 transition hover:bg-white/70"
+              >
+                {s.imageUrl && <Image src={s.imageUrl} alt="" fill sizes="32px" className="object-contain p-1.5" />}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="pointer-events-none relative mt-2 h-[clamp(3.2rem,8.6vw,7.2rem)] overflow-hidden select-none"
+        aria-hidden
+      >
+        <div className="marquee absolute top-0 left-0 items-start [--marquee-duration:36s]">
           {[0, 1].map((dup) => (
             <div key={dup} className="flex shrink-0">
-              {words.map((w, i) => (
+              {Array.from({ length: 3 }, (_, i) => (
                 <span
                   key={i}
-                  className="bg-gradient-to-b from-olive-deep/90 to-olive-deep/60 bg-clip-text pr-[0.35em] text-[clamp(4rem,13vw,12rem)] leading-[0.95] font-bold tracking-tight whitespace-nowrap text-transparent"
+                  className="pr-[0.28em] text-[clamp(4.6rem,13.5vw,11rem)] leading-none font-semibold tracking-[-0.045em] whitespace-nowrap text-olive-deep/55"
                 >
-                  {w}
+                  {running}
                 </span>
               ))}
             </div>

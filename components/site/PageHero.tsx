@@ -1,3 +1,4 @@
+import { RichText } from "@/components/common/RichText";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
@@ -37,12 +38,9 @@ export function PageHero({
           {title}
         </h1>
         {description && (
-          <p
-            className="animate-fade-up mt-4 max-w-2xl text-[15px] leading-relaxed text-forest/70"
-            style={{ animationDelay: "240ms" }}
-          >
-            {description}
-          </p>
+          <div className="animate-fade-up mt-4 max-w-2xl" style={{ animationDelay: "240ms" }} data-no-reveal>
+            <RichText text={description} className="text-[15px] leading-relaxed text-forest/70" />
+          </div>
         )}
       </div>
     </section>

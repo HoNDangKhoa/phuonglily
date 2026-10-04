@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Check } from "lucide-react";
+import { RichText } from "@/components/common/RichText";
 import { PawButton } from "@/components/site/Buttons";
 import { Reveal } from "@/components/site/Reveal";
 import type { TrainingContent } from "@/lib/home-content";
@@ -35,7 +36,7 @@ export function TrainingSection({ training }: { training: TrainingContent }) {
               </div>
               <div className="flex flex-1 flex-col px-5 pt-5 pb-5">
                 <h3 className="text-xl font-normal text-forest">{g.name}</h3>
-                <p className="mt-1 text-sm text-forest/80">{g.description}</p>
+                <RichText text={g.description} className="mt-1 text-sm text-forest/80" />
                 <ul className="mt-4 space-y-1.5">
                   {g.features.filter(Boolean).map((f, k) => (
                     <li key={k} className="flex items-center gap-3 text-sm text-forest/85">
