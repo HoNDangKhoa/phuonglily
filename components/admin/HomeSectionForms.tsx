@@ -798,7 +798,7 @@ export function FooterEditor({ initial }: { initial: BannerData["footer"] }) {
     <SectionForm
       sectionKey="footer"
       title="Footer"
-      description="Ba cột Học viện, Chương trình và Liên hệ. Dòng chữ phuonglilyacademy chạy và chìm ở đáy footer."
+      description="Footer là thẻ trắng bốn cột: Học viện, Chương trình, Liên hệ, và logo cùng địa chỉ. Dòng phuonglilyacademy chỉ chạy ngang ở đáy. Form nhận tin không hiện trên footer."
       initial={initial}
     >
       {(v, set) => (

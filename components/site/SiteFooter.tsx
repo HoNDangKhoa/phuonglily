@@ -1,11 +1,57 @@
 import Image from "next/image";
 import Link from "next/link";
-import { RichText } from "@/components/common/RichText";
-import { NewsletterForm } from "@/components/site/NewsletterForm";
 import type { SiteSettings } from "@/lib/queries";
 
 function ColumnTitle({ children }: { children: string }) {
-  return <p className="mb-4 text-sm font-medium tracking-wide text-forest">{children}</p>;
+  return <p className="mb-6 text-[15px] font-medium text-forest">{children}</p>;
+}
+
+function SocialGlyph({ name }: { name: string }) {
+  const key = name.toLowerCase();
+  const common = "h-5 w-5";
+  if (key.includes("linkedin")) {
+    return (
+      <svg viewBox="0 0 24 24" className={common} fill="currentColor" aria-hidden>
+        <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.1c.5-1 1.8-2.1 3.8-2.1 4 0 4.8 2.6 4.8 6V24h-4v-7.7c0-1.8 0-4.1-2.5-4.1s-2.9 2-2.9 4V24h-4V8.5z" />
+      </svg>
+    );
+  }
+  if (key.includes("instagram")) {
+    return (
+      <svg viewBox="0 0 24 24" className={common} fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
+  if (key.includes("tiktok")) {
+    return (
+      <svg viewBox="0 0 24 24" className={common} fill="currentColor" aria-hidden>
+        <path d="M14 3c.4 2.6 1.8 4.4 4.2 4.7v3c-1.5 0-2.9-.5-4.2-1.4v6.6c0 3.4-2.6 6.1-6.2 6.1S1.6 19.3 1.6 15.9c0-3.3 2.5-6 5.8-6.1v3.1c-1.5.1-2.7 1.4-2.7 3s1.2 2.9 2.8 2.9 2.7-1.3 2.7-2.9V3H14z" />
+      </svg>
+    );
+  }
+  if (key.includes("youtube")) {
+    return (
+      <svg viewBox="0 0 24 24" className={common} fill="currentColor" aria-hidden>
+        <path d="M23 12.2s0-3.2-.4-4.6c-.2-.9-.9-1.6-1.8-1.8C19.2 5.4 12 5.4 12 5.4s-7.2 0-8.8.4c-.9.2-1.6.9-1.8 1.8C1 9 1 12.2 1 12.2s0 3.2.4 4.6c.2.9.9 1.6 1.8 1.8 1.6.4 8.8.4 8.8.4s7.2 0 8.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.4.4-4.6.4-4.6zM9.8 15.5v-6.6l6.2 3.3-6.2 3.3z" />
+      </svg>
+    );
+  }
+  if (key.includes("facebook") || key.includes("fanpage")) {
+    return (
+      <svg viewBox="0 0 24 24" className={common} fill="currentColor" aria-hidden>
+        <path d="M14.5 8.5V6.3c0-.8.2-1.3 1.4-1.3H17V2h-2.3C11.6 2 10.2 3.5 10.2 6.1v2.4H8v3h2.2V22h3.3v-10.5h2.6l.4-3h-3z" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" className={common} fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.5 2.8 3.8 5.8 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-5.8-3.8-9S9.5 5.8 12 3z" />
+    </svg>
+  );
 }
 
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
@@ -13,142 +59,137 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
   const phone = f.phone || settings.hotline || settings.phone;
   const email = f.email || settings.email;
   const address = f.address || settings.headOffice;
-  const website = f.website || settings.website;
-  const websiteHref = website
-    ? /^https?:\/\//.test(website)
-      ? website
-      : `https://${website}`
-    : "";
   const pages = [
     ...settings.header.links,
     { id: "footer-cta", label: settings.header.ctaLabel, href: settings.header.ctaHref },
   ].filter((link) => link.label && link.href);
   const programs = settings.training.items.filter((item) => item.isVisible !== false && item.name);
   const running = (f.wordmark || "phuonglilyacademy").replace(/\s+/g, "").toLowerCase() || "phuonglilyacademy";
+  const copyright = f.copyright.replace(/\s*\n\s*/g, " ").trim();
+  const uploadedSocials = settings.socialFooter
+    .filter((item) => item.link || item.imageUrl)
+    .map((item) => ({ id: item.id, label: item.title || "Mạng xã hội", href: item.link || "#", imageUrl: item.imageUrl }));
+  const socials =
+    uploadedSocials.length > 0
+      ? uploadedSocials
+      : Object.entries(settings.social)
+          .filter(([, href]) => Boolean(href?.trim()))
+          .map(([key, href]) => ({ id: `social-${key}`, label: key, href, imageUrl: "" }));
 
   return (
-    <footer className="relative overflow-hidden bg-olive text-forest">
-      <div className="container-site grid gap-12 pt-16 pb-10 md:grid-cols-2 md:pt-20 lg:grid-cols-12">
-        <div className="lg:col-span-3">
-          <ColumnTitle>Học viện</ColumnTitle>
-          <ul className="space-y-3 text-sm text-forest/80">
-            {pages.map((link) => (
-              <li key={link.id}>
-                <Link href={link.href} className="transition hover:text-forest">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="lg:col-span-4">
-          <ColumnTitle>Chương trình</ColumnTitle>
-          <ul className="space-y-3 text-sm text-forest/80">
-            {programs.map((item) => (
-              <li key={item.id}>
-                <Link href={item.ctaHref || "/khoa-hoc"} className="transition hover:text-forest">
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="lg:col-span-5">
-          <ColumnTitle>{f.contactTitle || "Liên hệ"}</ColumnTitle>
-          <ul className="space-y-2.5 text-sm text-forest/80">
-            {phone && (
-              <li>
-                <span className="block text-xs tracking-wide text-forest/55">Điện thoại</span>
-                <a href={`tel:${phone.replace(/\s+/g, "")}`} className="transition hover:text-forest">
-                  {phone}
-                </a>
-              </li>
-            )}
-            {email && (
-              <li>
-                <span className="block text-xs tracking-wide text-forest/55">Email</span>
-                <a href={`mailto:${email}`} className="transition hover:text-forest">
-                  {email}
-                </a>
-              </li>
-            )}
-            {settings.workingHours && (
-              <li>
-                <span className="block text-xs tracking-wide text-forest/55">Giờ làm việc</span>
-                <span>{settings.workingHours}</span>
-              </li>
-            )}
-            {website && (
-              <li>
-                <a href={websiteHref} className="transition hover:text-forest">
-                  {website}
-                </a>
-              </li>
-            )}
-            {address && (
-              <li>
-                <span className="block text-xs tracking-wide text-forest/55">{f.addressTitle || "Địa chỉ"}</span>
-                <span>{address}</span>
-              </li>
-            )}
-          </ul>
-          <div className="mt-6 max-w-md">
-            <p className="text-sm font-medium">{f.newsletterTitle}</p>
-            <RichText text={f.newsletterDescription} className="mt-2 text-sm leading-relaxed text-forest/75" />
-            <NewsletterForm placeholder={f.newsletterPlaceholder} />
+    <footer className="bg-sage px-4 pt-6 pb-0 md:px-6 md:pt-8">
+      <div className="mx-auto max-w-[1440px] rounded-[28px] bg-white px-7 py-12 text-forest md:px-12 md:py-14 lg:px-16">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          <div>
+            <ColumnTitle>Học viện</ColumnTitle>
+            <ul className="space-y-3.5 text-sm text-forest/85">
+              {pages.map((link) => (
+                <li key={link.id}>
+                  <Link href={link.href} className="transition hover:text-leaf">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </div>
 
-      <div className="container-site border-t border-forest/15 py-6">
-        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            {settings.logoUrl && (
-              <span className="relative block h-11 w-11 overflow-hidden rounded-full bg-white/50">
-                <Image src={settings.logoUrl} alt="" fill sizes="44px" className="object-cover" />
-              </span>
-            )}
-            <div>
-              <p className="text-sm font-medium">{settings.name}</p>
-              {address && <p className="mt-0.5 max-w-sm text-xs leading-relaxed text-forest/70">{address}</p>}
+          <div>
+            <ColumnTitle>Chương trình</ColumnTitle>
+            <ul className="space-y-3.5 text-sm text-forest/85">
+              {programs.map((item) => (
+                <li key={item.id}>
+                  <Link href={item.ctaHref || "/khoa-hoc"} className="transition hover:text-leaf">
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <ColumnTitle>Liên hệ</ColumnTitle>
+            <div className="space-y-5 text-sm text-forest/85">
+              {phone && (
+                <div>
+                  <p>Điện thoại</p>
+                  <a href={`tel:${phone.replace(/\s+/g, "")}`} className="mt-1 block transition hover:text-leaf">
+                    {phone}
+                  </a>
+                </div>
+              )}
+              {email && (
+                <p>
+                  Email:{" "}
+                  <a href={`mailto:${email}`} className="transition hover:text-leaf">
+                    {email}
+                  </a>
+                </p>
+              )}
+              {settings.workingHours && (
+                <div>
+                  <p>Giờ làm việc</p>
+                  <p className="mt-1">{settings.workingHours}</p>
+                </div>
+              )}
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-forest/75">
-            <span className="whitespace-pre-line">{f.copyright}</span>
-            {f.policies.map((p) => (
-              <Link key={p.id} href={p.href || "#"} className="transition hover:text-forest">
-                {p.label}
+
+          <div>
+            <div className="flex items-center gap-3">
+              {settings.logoUrl && (
+                <span className="relative block h-11 w-11 shrink-0 overflow-hidden">
+                  <Image src={settings.logoUrl} alt="" fill sizes="44px" className="object-contain" />
+                </span>
+              )}
+              <p className="text-[1.7rem] leading-none font-medium tracking-tight">{settings.name}</p>
+            </div>
+            {settings.slogan && <p className="mt-4 text-sm text-forest/80">{settings.slogan}</p>}
+            {address && <p className="mt-3 max-w-[220px] text-sm leading-relaxed whitespace-pre-line text-forest/80">{address}</p>}
+            {socials.length > 0 && (
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-forest">
+                {socials.map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={item.label}
+                    className="transition hover:text-leaf"
+                  >
+                    {item.imageUrl ? (
+                      <span className="relative block h-5 w-5">
+                        <Image src={item.imageUrl} alt="" fill sizes="20px" className="object-contain" />
+                      </span>
+                    ) : (
+                      <SocialGlyph name={item.label} />
+                    )}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-16 flex flex-col gap-4 text-sm text-forest/75 md:mt-24 md:flex-row md:items-center md:justify-between">
+          <p>{copyright}</p>
+          <div className="flex flex-wrap gap-x-10 gap-y-2">
+            {f.policies.map((policy) => (
+              <Link key={policy.id} href={policy.href || "#"} className="transition hover:text-forest">
+                {policy.label}
               </Link>
-            ))}
-            {settings.socialFooter.map((s) => (
-              <a
-                key={s.id}
-                href={s.link || "#"}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={s.title}
-                className="relative h-8 w-8 overflow-hidden rounded-full bg-white/40 transition hover:bg-white/70"
-              >
-                {s.imageUrl && <Image src={s.imageUrl} alt="" fill sizes="32px" className="object-contain p-1.5" />}
-              </a>
             ))}
           </div>
         </div>
       </div>
 
-      <div
-        className="pointer-events-none relative mt-2 h-[clamp(3.2rem,8.6vw,7.2rem)] overflow-hidden select-none"
-        aria-hidden
-      >
+      <div className="pointer-events-none relative mt-2 h-[clamp(3rem,8vw,6.6rem)] overflow-hidden select-none" aria-hidden>
         <div className="marquee absolute top-0 left-0 items-start [--marquee-duration:36s]">
           {[0, 1].map((dup) => (
             <div key={dup} className="flex shrink-0">
               {Array.from({ length: 3 }, (_, i) => (
                 <span
                   key={i}
-                  className="pr-[0.28em] text-[clamp(4.6rem,13.5vw,11rem)] leading-none font-semibold tracking-[-0.045em] whitespace-nowrap text-olive-deep/55"
+                  className="pr-[0.28em] text-[clamp(4.2rem,12vw,10rem)] leading-none font-semibold tracking-[-0.045em] whitespace-nowrap text-forest/25"
                 >
                   {running}
                 </span>
