@@ -65,7 +65,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
     { id: "footer-cta", label: settings.header.ctaLabel, href: settings.header.ctaHref },
   ].filter((link) => link.label && link.href);
   const programs = settings.training.items.filter((item) => item.isVisible !== false && item.name);
-  const running = (f.wordmark || "phuonglilyacademy").replace(/\s+/g, "").toLowerCase() || "phuonglilyacademy";
+  const running = f.wordmark.trim() || "Phuong Lily Academy";
   const copyright = f.copyright.replace(/\s*\n\s*/g, " ").trim();
   const uploadedSocials = settings.socialFooter
     .filter((item) => item.link || item.imageUrl)
@@ -190,7 +190,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               {Array.from({ length: 3 }, (_, i) => (
                 <span
                   key={i}
-                  className="pr-[0.28em] text-[clamp(3.2rem,8vw,6.5rem)] leading-none font-semibold tracking-[-0.045em] whitespace-nowrap text-forest/25"
+                  className="pr-[0.35em] pb-[0.08em] text-[clamp(3.2rem,8vw,6.5rem)] leading-[1.05] font-semibold tracking-[-0.04em] whitespace-nowrap text-forest/25"
                 >
                   {running}
                 </span>

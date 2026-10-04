@@ -1,5 +1,14 @@
 import { Phone } from "lucide-react";
 
+function ZaloMark() {
+  return (
+    <span className="relative flex h-[3.25rem] w-[3.25rem] items-center justify-center rounded-[18px] rounded-bl-[5px] bg-[#0068FF] text-[13px] font-extrabold tracking-tight text-white shadow-[0_12px_28px_-12px_rgba(0,104,255,0.95)]">
+      Zalo
+      <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-[#22c55e] shadow-sm" />
+    </span>
+  );
+}
+
 export function ContactDock({ phone, zalo }: { phone: string; zalo: string }) {
   const tel = phone.replace(/[^\d+]/g, "");
   const zaloRaw = zalo.trim();
@@ -11,25 +20,29 @@ export function ContactDock({ phone, zalo }: { phone: string; zalo: string }) {
   if (!tel && !zaloHref) return null;
 
   return (
-    <div className="fixed top-1/2 left-3 z-40 flex -translate-y-1/2 flex-col gap-3 md:left-4">
+    <div className="fixed top-1/2 left-3 z-40 flex -translate-y-1/2 flex-col gap-4 md:left-4">
       {zaloHref && (
         <a
           href={zaloHref}
           target="_blank"
           rel="noreferrer"
           aria-label="Chat Zalo"
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0068FF] text-[9px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(0,104,255,0.8)] transition hover:scale-105"
+          className="dock-btn text-[#0068FF]"
         >
-          <span className="text-[11px] leading-none font-bold tracking-tight">Zalo</span>
+          <span className="dock-ring border-[#0068FF]" />
+          <span className="dock-ring dock-ring-delay border-[#0068FF]" />
+          <ZaloMark />
         </a>
       )}
       {tel && (
         <a
           href={`tel:${tel}`}
           aria-label="Gọi hotline"
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f5a524] text-white shadow-[0_8px_20px_-8px_rgba(245,165,36,0.9)] transition hover:scale-105"
+          className="dock-btn bg-[#f5a524] text-white shadow-[0_10px_24px_-10px_rgba(245,165,36,0.95)]"
         >
-          <Phone size={20} />
+          <span className="dock-ring border-[#f5a524]" />
+          <span className="dock-ring dock-ring-delay border-[#f5a524]" />
+          <Phone size={22} className="dock-phone" strokeWidth={2.2} />
         </a>
       )}
     </div>

@@ -15,6 +15,7 @@ import {
   getPublishedPosts,
   getSiteSettings,
   incrementPostViews,
+  isKnowledgePost,
   type SiteSettings,
 } from "@/lib/queries";
 
@@ -53,7 +54,9 @@ export async function listMetadata(type: PostType): Promise<Metadata> {
 }
 
 export async function PostListPage({ type }: { type: PostType }) {
-  const posts = await getPublishedPosts(type);
+  const all = await getPublishedPosts(type);
+  const knowledge = type === "BLOG" ? all.filter(isKnowledgePost) : all;
+  const posts = type === "BLOG" && knowledge.length === 0 ? all : knowledge;
   const label = POST_TYPE_LABEL[type];
 
   return (

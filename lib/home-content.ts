@@ -282,7 +282,7 @@ export function defaultFaq(): FaqContent {
 }
 
 export function defaultBlogSection(): BlogSectionContent {
-  return { title: "Blog", limit: 9 };
+  return { title: "Kiến thức Yoga", limit: 9 };
 }
 
 export function defaultFooter(): FooterContent {
@@ -304,7 +304,7 @@ export function defaultFooter(): FooterContent {
     newsletterDescription:
       "Hãy đăng ký để nhận các lời khuyên thiết thực, thông tin chuyên sâu về tập luyện và các công cụ hỗ trợ hành trình rèn luyện thể chất của bạn.",
     newsletterPlaceholder: "Hãy nhập email của bạn",
-    wordmark: "phuonglilyacademy",
+    wordmark: "Phuong Lily Academy",
   };
 }
 

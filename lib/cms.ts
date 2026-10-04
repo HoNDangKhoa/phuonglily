@@ -23,7 +23,7 @@ export const POST_TYPE_LABEL: Record<string, string> = {
   COURSE: "Khoá học",
   ONLINE: "Học online",
   EVENT: "Lịch sự kiện",
-  BLOG: "Blog",
+  BLOG: "Kiến thức Yoga",
 };
 
 export const POST_STATUS_LABEL: Record<string, string> = {

@@ -191,6 +191,12 @@ export function parseBannerData(raw?: string | null): BannerData {
     if (merged.training.title === "Khám phá các nhóm đào tạo") {
       merged.training.title = "Lớp tập online";
     }
+    if (merged.blogSection.title.trim().toLowerCase() === "blog") {
+      merged.blogSection.title = "Kiến thức Yoga";
+    }
+    if (merged.footer.wordmark.replace(/\s+/g, "").toLowerCase() === "phuonglilyacademy") {
+      merged.footer.wordmark = "Phuong Lily Academy";
+    }
     return merged;
   } catch {
     return base;

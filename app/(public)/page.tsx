@@ -7,13 +7,15 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { QuoteSection } from "@/components/home/QuoteSection";
 import { RoadmapSection } from "@/components/home/RoadmapSection";
 import { TrainingSection } from "@/components/home/TrainingSection";
-import { getPublishedPosts, getSiteSettings } from "@/lib/queries";
+import { getPublishedPosts, getSiteSettings, isKnowledgePost } from "@/lib/queries";
 
 export const revalidate = 300;
 
 export default async function HomePage() {
   const settings = await getSiteSettings();
-  const posts = await getPublishedPosts("BLOG", settings.blogSection.limit);
+  const blogPosts = await getPublishedPosts("BLOG");
+  const knowledge = blogPosts.filter(isKnowledgePost);
+  const posts = (knowledge.length ? knowledge : blogPosts).slice(0, settings.blogSection.limit);
 
   return (
     <>

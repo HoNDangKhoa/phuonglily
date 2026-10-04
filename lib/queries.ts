@@ -13,6 +13,7 @@ export type PublicPost = {
   thumbnail: string | null;
   type: string;
   categoryName: string | null;
+  categorySlug: string | null;
   publishedAt: string | null;
   createdAt: string;
   eventDate: string | null;
@@ -29,7 +30,7 @@ export type PublicPost = {
 };
 
 type PostRow = Awaited<ReturnType<typeof prisma.post.findFirst>> & {
-  category?: { name: string } | null;
+  category?: { name: string; slug?: string } | null;
 };
 
 function toPublic(p: NonNullable<PostRow>): PublicPost {
@@ -42,6 +43,7 @@ function toPublic(p: NonNullable<PostRow>): PublicPost {
     thumbnail: p.thumbnail,
     type: p.type,
     categoryName: p.category?.name ?? null,
+    categorySlug: p.category?.slug ?? null,
     publishedAt: p.publishedAt?.toISOString() ?? null,
     createdAt: p.createdAt.toISOString(),
     eventDate: p.eventDate?.toISOString() ?? null,
@@ -58,6 +60,12 @@ function toPublic(p: NonNullable<PostRow>): PublicPost {
   };
 }
 
+export function isKnowledgePost(post: { categoryName?: string | null; categorySlug?: string | null }) {
+  const name = (post.categoryName || "").toLowerCase();
+  const slug = (post.categorySlug || "").toLowerCase();
+  return name.includes("kiến thức yoga") || slug.includes("kien-thuc-yoga");
+}
+
 const publishedWhere = (type: PostType) => ({
   type,
   status: "PUBLISHED",
@@ -69,7 +77,7 @@ export async function getPublishedPosts(type: PostType, limit?: number) {
     const rows = await cacheRemember(CacheKeys.posts(type), async () => {
       const posts = await prisma.post.findMany({
         where: publishedWhere(type),
-        include: { category: { select: { name: true } } },
+        include: { category: { select: { name: true, slug: true } } },
         orderBy:
           type === "EVENT"
             ? [{ eventDate: "asc" }, { sortOrder: "asc" }]
@@ -89,7 +97,7 @@ export async function getPostBySlug(type: PostType, slug: string) {
     return await cacheRemember(CacheKeys.post(slug), async () => {
       const post = await prisma.post.findFirst({
         where: { ...publishedWhere(type), slug },
-        include: { category: { select: { name: true } } },
+        include: { category: { select: { name: true, slug: true } } },
       });
       return post ? toPublic(post) : null;
     });

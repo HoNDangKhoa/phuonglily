@@ -225,6 +225,70 @@ html.lenis body {
   animation: avatar-float 2.6s ease-in-out infinite;
 }
 
+.dock-btn {
+  position: relative;
+  display: flex;
+  height: 3.25rem;
+  width: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.dock-btn:hover {
+  transform: scale(1.08);
+}
+
+.dock-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 2px solid;
+  animation: dock-pulse 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.dock-ring-delay {
+  animation-delay: 0.7s;
+}
+
+.dock-phone {
+  animation: dock-wiggle 1.8s ease-in-out infinite;
+  transform-origin: 50% 70%;
+}
+
+@keyframes dock-pulse {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes dock-wiggle {
+  0%,
+  55%,
+  100% {
+    transform: rotate(0);
+  }
+  62% {
+    transform: rotate(-16deg);
+  }
+  70% {
+    transform: rotate(14deg);
+  }
+  78% {
+    transform: rotate(-8deg);
+  }
+  86% {
+    transform: rotate(0);
+  }
+}
+
 /* ---------------- Accordion height animation ---------------- */
 .collapse-grid {
   display: grid;
@@ -344,7 +408,9 @@ html.lenis body {
   .marquee,
   .kenburns,
   .float-y,
-  .avatar-float {
+  .avatar-float,
+  .dock-ring,
+  .dock-phone {
     animation: none;
   }
   .reveal {

@@ -791,8 +791,8 @@ export function BlogSectionEditor({ initial }: { initial: BannerData["blogSectio
   return (
     <SectionForm
       sectionKey="blogSection"
-      title="Section Blog"
-      description="Hiển thị tối đa 3 bài; nếu nhiều hơn 3 bài, danh sách sẽ chuyển động liên tục. Bài viết quản lý tại Quản lý bài viết → Blog."
+      title="Kiến thức Yoga"
+      description="Ưu tiên bài thuộc chuyên mục Kiến thức Yoga. Nếu chưa có chuyên mục đó, hiển thị các bài viết blog. Nhiều hơn 3 bài thì danh sách chạy ngang."
       initial={initial}
     >
       {(v, set) => (
