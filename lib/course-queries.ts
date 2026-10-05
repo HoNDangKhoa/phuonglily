@@ -1,5 +1,5 @@
+import { POST_TYPE_VIEW_PATH, type PostType } from "@/lib/cms";
 import { prisma } from "@/lib/prisma";
-import type { PostType } from "@/lib/cms";
 import { progressPercent } from "@/lib/learning";
 
 export type LearnableType = Extract<PostType, "COURSE" | "ONLINE">;
@@ -49,6 +49,66 @@ export async function getCatalogCourses(kind: keyof typeof CATALOG_NEEDLES): Pro
     return needles.some((needle) => label.includes(needle));
   });
   return matched.length ? matched : cards;
+}
+
+const LINK_STOP = new Set([
+  "dao", "tao", "chuong", "trinh", "giao", "vien", "yoga", "hlv",
+  "online", "lop", "khoa", "hoc", "tai", "nha", "cung", "trong",
+  "chuyen", "sau", "va", "cac", "cho", "mot", "cua",
+]);
+
+function linkTokens(value: string) {
+  return foldLabel(value)
+    .replace(/[^a-z0-9]+/g, " ")
+    .split(" ")
+    .filter((word) => word.length >= 3 && !LINK_STOP.has(word));
+}
+
+function hourTokens(value: string) {
+  return [...foldLabel(value).matchAll(/(\d{2,4})\s*h\b/g)].map((match) => match[1]);
+}
+
+function linkScore(label: string, course: CourseCard) {
+  const hours = hourTokens(label);
+  const courseHours = hourTokens(course.title);
+  let score = hours.some((hour) => courseHours.includes(hour)) ? 12 : 0;
+  const words = new Set(linkTokens(label));
+  for (const word of linkTokens(course.title)) {
+    if (words.has(word)) score += 5;
+  }
+  return score;
+}
+
+/** Gắn nút của từng mục trang chủ vào khoá cùng tên, giữ nguyên nội dung CMS khi chưa có khoá khớp. */
+export function withCatalogLinks<T extends { ctaHref: string }>(
+  items: T[],
+  label: (item: T) => string,
+  courses: CourseCard[],
+): T[] {
+  const pairs: { index: number; courseId: string; score: number }[] = [];
+  items.forEach((item, index) => {
+    for (const course of courses) {
+      const score = linkScore(label(item), course);
+      if (score >= 8) pairs.push({ index, courseId: course.id, score });
+    }
+  });
+  pairs.sort((a, b) => b.score - a.score || a.index - b.index);
+  const usedItems = new Set<number>();
+  const usedCourses = new Set<string>();
+  const hrefs = new Map<number, string>();
+  for (const pair of pairs) {
+    if (usedItems.has(pair.index) || usedCourses.has(pair.courseId)) continue;
+    const course = courses.find((item) => item.id === pair.courseId);
+    if (!course) continue;
+    usedItems.add(pair.index);
+    usedCourses.add(pair.courseId);
+    const base = POST_TYPE_VIEW_PATH[course.type] || "/khoa-hoc";
+    hrefs.set(pair.index, `${base}/${course.slug}`);
+  }
+  return items.map((item, index) => {
+    const href = hrefs.get(index);
+    return href ? { ...item, ctaHref: href } : item;
+  });
 }
 
 export async function getCourseCards(type: LearnableType): Promise<CourseCard[]> {
