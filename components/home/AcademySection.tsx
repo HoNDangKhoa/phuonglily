@@ -20,7 +20,7 @@ export function AcademySection({ academy }: { academy: AcademyContent }) {
               <div className="inline-flex text-forest">
                 <SiteIcon icon={f.icon} iconUrl={f.iconUrl} size={56} />
               </div>
-              <h3 className="mt-4 text-[1.6rem] leading-snug font-normal text-forest transition-colors duration-500 group-hover:text-leaf">
+              <h3 className="mt-4 line-clamp-2 min-h-[2.6em] text-[1.35rem] leading-[1.3] font-normal text-forest transition-colors duration-500 group-hover:text-leaf md:text-[1.6rem]">
                 {f.title}
               </h3>
               <RichText text={f.description} className="mt-2 max-w-sm text-sm leading-relaxed text-forest/75" />

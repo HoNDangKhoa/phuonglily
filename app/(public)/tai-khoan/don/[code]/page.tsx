@@ -6,20 +6,21 @@ import { formatDate } from "@/components/site/PostCard";
 import { POST_TYPE_VIEW_PATH } from "@/lib/cms";
 import { getStudentOrder } from "@/lib/course-queries";
 import { enrollmentStatus, formatVnd } from "@/lib/learning";
-import { sepayConfig } from "@/lib/sepay";
+import { SepayQrPay } from "@/components/course/SepayQrPay";
+import { sepayQrConfig, sepayQrUrl } from "@/lib/sepay";
 import { getSiteSettings } from "@/lib/queries";
 import { requireStudent } from "@/lib/student-auth";
 import { cn } from "@/lib/utils";
 
 type Props = {
   params: Promise<{ code: string }>;
-  searchParams: Promise<{ moi?: string; sepay?: string }>;
+  searchParams: Promise<{ moi?: string }>;
 };
 
 export default async function OrderDetailPage({ params, searchParams }: Props) {
   const { code } = await params;
-  const { moi, sepay } = await searchParams;
-  const payEnabled = sepayConfig().enabled;
+  const { moi } = await searchParams;
+  const qr = sepayQrConfig();
   const student = await requireStudent(`/tai-khoan/don/${code}`);
   const [order, settings] = await Promise.all([getStudentOrder(student.id, code), getSiteSettings()]);
   if (!order) notFound();
@@ -145,21 +146,17 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
           )}
         </dl>
 
-        {order.status === "PENDING" && order.amount > 0 && payEnabled && (
-          <form action="/api/sepay/checkout" method="POST" className="mt-6">
-            {sepay === "success" && (
-              <p className="mb-3 text-sm text-forest/70">
-                SePay đang xác nhận giao dịch. Trang sẽ cập nhật sang “Đang học” ngay khi thanh toán thành công.
-              </p>
-            )}
-            {sepay === "cancel" && <p className="mb-3 text-sm text-amber-700">Bạn đã huỷ thanh toán. Có thể thử lại bên dưới.</p>}
-            {sepay === "error" && <p className="mb-3 text-sm text-red-600">Thanh toán không thành công. Vui lòng thử lại.</p>}
-            <button type="submit" className="inline-flex rounded-full bg-forest px-6 py-3 text-sm font-medium text-white hover:bg-leaf">
-              Thanh toán {formatVnd(order.amount)}
-            </button>
-          </form>
+        {order.status === "PENDING" && order.amount > 0 && qr.enabled && (
+          <SepayQrPay
+            code={order.code}
+            amount={order.amount}
+            qrUrl={sepayQrUrl(order.amount, order.code)}
+            bank={qr.bank}
+            account={qr.account}
+            holder={qr.holder}
+          />
         )}
-        {order.status === "PENDING" && !payEnabled && (
+        {order.status === "PENDING" && order.amount > 0 && !qr.enabled && (
           <div className="mt-6 rounded-2xl bg-sage/60 p-4 text-sm leading-relaxed text-forest/80">
             Đơn đăng ký đang chờ xác nhận. Tư vấn viên sẽ liên hệ qua số <b>{order.phone}</b> để hướng
             dẫn thanh toán. Cần hỗ trợ ngay, vui lòng gọi{" "}

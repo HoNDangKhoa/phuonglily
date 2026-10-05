@@ -19,7 +19,7 @@ export default async function AdminEnrollmentsPage({ searchParams }: Props) {
     <div>
       <AdminPageHeader title="Đơn đăng ký học" />
       <p className="mb-4 text-sm text-ink/55">
-        Đơn mới ở trạng thái “Chờ xác nhận”. Sau khi học viên thanh toán, chuyển sang “Đang học” để mở khoá toàn bộ bài học.
+        Đơn chuyển khoản QR được SePay tự chuyển sang “Đang học” khi tiền vào. Có thể đổi trạng thái thủ công nếu cần.
       </p>
       <EnrollmentsTable
         initialFilter={status && ["PENDING", "ACTIVE", "CANCELLED"].includes(status) ? status : "ALL"}

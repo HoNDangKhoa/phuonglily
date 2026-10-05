@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: title, template: `%s | ${s.name}` },
     description: s.metaDescription || s.hero.description,
     keywords: s.seoKeywords || undefined,
-    icons: s.faviconUrl ? { icon: s.faviconUrl } : undefined,
+    metadataBase: new URL("https://www.phuonglilyacademy.com"),
     verification: verification ? { google: verification } : undefined,
     openGraph: { title, siteName: s.name, type: "website", locale: "vi_VN" },
   };

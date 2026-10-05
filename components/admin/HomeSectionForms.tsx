@@ -30,8 +30,6 @@ import {
   newFounderStat,
   newIconItem,
   newLink,
-  newRoadmapItem,
-  newTrainingGroup,
 } from "@/lib/home-content";
 import { cn } from "@/lib/utils";
 
@@ -527,7 +525,7 @@ export function RoadmapEditor({ initial }: { initial: BannerData["roadmap"] }) {
     <SectionForm
       sectionKey="roadmap"
       title="Lộ trình Yoga toàn diện"
-      description="Mỗi mục khi bấm sổ ra: tiêu đề - nội dung - nút đăng ký, ảnh bên phải đổi theo mục."
+      description="Tiêu đề của khối. Các thẻ bên dưới lấy từ khoá học đã xuất bản trong danh mục Lớp đào tạo giảng viên."
       initial={initial}
     >
       {(v, set) => (
@@ -538,25 +536,13 @@ export function RoadmapEditor({ initial }: { initial: BannerData["roadmap"] }) {
               <Field label="Tiêu đề chính" value={v.title} onChange={(title) => set({ ...v, title })} />
             </div>
           </AdminCard>
-          <AdminCard title="Lớp đào tạo giảng viên (khuyến nghị 5)">
-            <ListEditor
-              items={v.items}
-              onChange={(items) => set({ ...v, items })}
-              create={newRoadmapItem}
-              itemTitle={(i) => i.title}
-              addLabel="Thêm chương trình"
-              render={(i, update) => (
-                <div className="grid gap-3 md:grid-cols-2">
-                  <div className="space-y-3">
-                    <Field label="Tiêu đề" value={i.title} onChange={(title) => update({ title })} />
-                    <Field label="Nội dung" rich value={i.description} onChange={(description) => update({ description })} />
-                    <Field label="Nhãn nút" value={i.ctaLabel} onChange={(ctaLabel) => update({ ctaLabel })} />
-                    <Field label="Link nút đăng ký" value={i.ctaHref} onChange={(ctaHref) => update({ ctaHref })} />
-                  </div>
-                  <ImageField label="Hình ảnh hiển thị khi mở mục" hint="Thiết kế đúng 1000 × 1120 px (tỉ lệ 1.12:1)." value={i.imageUrl} onChange={(imageUrl) => update({ imageUrl })} />
-                </div>
-              )}
-            />
+          <AdminCard title="Nguồn khoá học">
+            <p className="text-sm leading-relaxed text-ink/70">
+              Trang chủ hiển thị đúng các thẻ ở mục Khoá học thuộc danh mục <b>Lớp đào tạo giảng viên</b>. Sửa ảnh, giá và mô tả tại{" "}
+              <Link href="/admin/content/courses" className="font-semibold text-[#3f7d3a]">Khoá học</Link>
+              {" "}và gán danh mục tại{" "}
+              <Link href="/admin/categories" className="font-semibold text-[#3f7d3a]">Danh mục</Link>.
+            </p>
           </AdminCard>
         </>
       )}
@@ -667,7 +653,7 @@ export function TrainingEditor({ initial }: { initial: BannerData["training"] })
     <SectionForm
       sectionKey="training"
       title="Lớp tập online"
-      description="6 ô: tên, mô tả, 4 mục tiêu chuẩn và nút Đăng ký ngay (hiệu ứng nút Pawlates)."
+      description="Tiêu đề của khối. Các thẻ bên dưới lấy từ khoá học đã xuất bản trong danh mục Lớp online cộng đồng."
       initial={initial}
     >
       {(v, set) => (
@@ -675,46 +661,13 @@ export function TrainingEditor({ initial }: { initial: BannerData["training"] })
           <AdminCard title="Tiêu đề section">
             <Field label="Tiêu đề" value={v.title} onChange={(title) => set({ ...v, title })} />
           </AdminCard>
-          <AdminCard title="Các nhóm đào tạo">
-            <ListEditor
-              items={v.items}
-              onChange={(items) => set({ ...v, items })}
-              create={newTrainingGroup}
-              itemTitle={(g) => g.name}
-              addLabel="Thêm nhóm"
-              render={(g, update) => (
-                <div className="grid gap-3 md:grid-cols-2">
-                  <div className="space-y-3">
-                    <Field label="Tên" value={g.name} onChange={(name) => update({ name })} />
-                    <Field label="Mô tả" rich value={g.description} onChange={(description) => update({ description })} />
-                    <div>
-                      <Label>4 mục tiêu chuẩn</Label>
-                      <div className="space-y-2">
-                        {[0, 1, 2, 3].map((k) => (
-                          <Input
-                            key={k}
-                            value={g.features[k] ?? ""}
-                            placeholder={`Tiêu chuẩn ${k + 1}`}
-                            onChange={(e) => {
-                              const features = [...g.features];
-                              while (features.length < 4) features.push("");
-                              features[k] = e.target.value;
-                              update({ features });
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <Field label="Nhãn nút" value={g.ctaLabel} onChange={(ctaLabel) => update({ ctaLabel })} />
-                      <Field label="Link nút" value={g.ctaHref} onChange={(ctaHref) => update({ ctaHref })} />
-                    </div>
-                    <VisibilitySwitch checked={g.isVisible} onChange={(isVisible) => update({ isVisible })} />
-                  </div>
-                  <ImageField label="Hình ảnh" hint="Thiết kế đúng 1200 × 706 px (tỉ lệ 1.7:1)." value={g.imageUrl} onChange={(imageUrl) => update({ imageUrl })} />
-                </div>
-              )}
-            />
+          <AdminCard title="Nguồn khoá học">
+            <p className="text-sm leading-relaxed text-ink/70">
+              Trang chủ hiển thị đúng các thẻ ở mục Học online thuộc danh mục <b>Lớp online cộng đồng</b>. Sửa ảnh, giá và mô tả tại{" "}
+              <Link href="/admin/content/online" className="font-semibold text-[#3f7d3a]">Học online</Link>
+              {" "}và gán danh mục tại{" "}
+              <Link href="/admin/categories" className="font-semibold text-[#3f7d3a]">Danh mục</Link>.
+            </p>
           </AdminCard>
         </>
       )}

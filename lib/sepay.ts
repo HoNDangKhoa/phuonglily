@@ -27,6 +27,34 @@ export function sepayConfig() {
   return { merchant, secret, enabled: Boolean(merchant && secret), checkoutUrl: sepayCheckoutUrl() };
 }
 
+/** QR chuyển khoản vào tài khoản ngân hàng đã liên kết trên my.sepay.vn. */
+export function sepayQrConfig() {
+  const account = process.env.SEPAY_BANK_ACCOUNT?.replace(/\s+/g, "") || "";
+  const bank = process.env.SEPAY_BANK_CODE?.trim() || "";
+  const holder = process.env.SEPAY_ACCOUNT_HOLDER?.trim() || "";
+  const webhookKey = process.env.SEPAY_WEBHOOK_API_KEY?.trim() || "";
+  return { account, bank, holder, webhookKey, enabled: Boolean(account && bank) };
+}
+
+export function sepayQrUrl(amount: number, description: string) {
+  const { account, bank } = sepayQrConfig();
+  const params = new URLSearchParams({
+    acc: account,
+    bank,
+    amount: String(Math.max(0, Math.round(amount))),
+    des: description,
+  });
+  return `https://qr.sepay.vn/img?${params.toString()}`;
+}
+
+export function webhookAuthorized(header: string | null, key: string) {
+  if (!header || !key) return false;
+  const token = header.match(/^(?:Apikey|Bearer)\s+(.+)$/i)?.[1]?.trim() || header.trim();
+  const given = Buffer.from(token);
+  const expected = Buffer.from(key);
+  return given.length === expected.length && timingSafeEqual(given, expected);
+}
+
 export function signSepayFields(fields: Record<string, string>, secret: string) {
   const signed = SIGNED_FIELDS.filter((field) => fields[field]).map(
     (field) => `${field}=${fields[field]}`,

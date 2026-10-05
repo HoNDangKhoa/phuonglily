@@ -206,7 +206,7 @@ export async function updateStudentProfile(input: z.input<typeof profileSchema>)
 
 async function nextOrderCode() {
   for (;;) {
-    const code = `PL${Math.floor(1_000_000 + Math.random() * 9_000_000)}`;
+    const code = `DH${Math.floor(1_000_000 + Math.random() * 9_000_000)}`;
     if (!(await prisma.enrollment.findUnique({ where: { code }, select: { id: true } }))) {
       return code;
     }

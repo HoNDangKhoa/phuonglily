@@ -26,6 +26,31 @@ export type CourseCard = {
   isFeatured: boolean;
 };
 
+function foldLabel(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
+}
+
+const CATALOG_NEEDLES = {
+  instructor: ["lop dao tao giang vien", "lop dao tao giao vien"],
+  online: ["lop online cong dong"],
+} as const;
+
+/** Khoá đã xuất bản của một danh mục. Nếu chưa đặt đúng tên danh mục thì dùng toàn bộ loại đó. */
+export async function getCatalogCourses(kind: keyof typeof CATALOG_NEEDLES): Promise<CourseCard[]> {
+  const type: LearnableType = kind === "instructor" ? "COURSE" : "ONLINE";
+  const cards = await getCourseCards(type);
+  const needles = CATALOG_NEEDLES[kind];
+  const matched = cards.filter((course) => {
+    const label = foldLabel(`${course.categoryName || ""} ${course.categorySlug || ""}`);
+    return needles.some((needle) => label.includes(needle));
+  });
+  return matched.length ? matched : cards;
+}
+
 export async function getCourseCards(type: LearnableType): Promise<CourseCard[]> {
   try {
     const posts = await prisma.post.findMany({

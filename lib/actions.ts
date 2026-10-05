@@ -396,6 +396,10 @@ export async function saveBrandAsset(
   payload: BrandAsset,
 ) {
   await saveBannerData((data) => ({ ...data, [kind]: payload }));
+  if (kind === "favicon") {
+    revalidatePath("/icon");
+    revalidatePath("/apple-icon");
+  }
 }
 
 export async function saveSlideshowItems(items: MediaListItem[]) {
