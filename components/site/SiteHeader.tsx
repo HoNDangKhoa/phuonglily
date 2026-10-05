@@ -20,11 +20,14 @@ export function SiteHeader({
   siteName: string;
 }) {
   const pathname = usePathname();
-  const overHero = pathname === "/";
+  // usePathname() is empty on the first server/client render, so the header
+  // would stay in the compact bar until something else caused a re-render.
+  const [locationPath, setLocationPath] = useState<string | null>(null);
+  const overHero = (locationPath ?? pathname) === "/";
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [openedAt, setOpenedAt] = useState<string | null>(null);
-  const open = openedAt === pathname;
+  const open = openedAt !== null && openedAt === pathname;
   const lastY = useRef(0);
   const [student, setStudent] = useState<{ name: string; email: string } | null>(null);
 
@@ -41,6 +44,14 @@ export function SiteHeader({
 
   const accountHref = student ? "/tai-khoan" : "/dang-nhap";
   const initial = (student?.name || student?.email || "").trim().charAt(0).toUpperCase();
+
+  useEffect(() => {
+    setLocationPath(window.location.pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (locationPath === "/") document.getElementById("hero-header-boot-style")?.remove();
+  }, [locationPath]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -71,14 +82,14 @@ export function SiteHeader({
       >
         <div
           className={cn(
-            "relative mx-auto flex w-full max-w-[1440px] items-center px-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] md:px-8 lg:px-[clamp(1.25rem,5.76vw,5.2rem)]",
+            "site-header-bar relative mx-auto flex w-full max-w-[1440px] items-center px-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] md:px-8 lg:px-[clamp(1.25rem,5.76vw,5.2rem)]",
             solid ? "h-[74px] bg-sage/95 shadow-[0_8px_24px_-18px_rgba(29,58,31,0.45)] backdrop-blur-md" : "h-[119px]",
           )}
         >
           <Link href="/" aria-label={siteName} className="relative z-10 shrink-0">
             <span
               className={cn(
-                "relative block overflow-hidden rounded-full ring-2 ring-white/70 transition-all duration-700",
+                "site-header-logo relative block overflow-hidden rounded-full ring-2 ring-white/70 transition-all duration-700",
                 solid ? "size-11" : "size-[95px]",
               )}
             >
@@ -94,7 +105,7 @@ export function SiteHeader({
 
           <nav
             className={cn(
-              "absolute top-1/2 left-[calc(50%+1.75rem)] hidden w-max -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border py-[5px] pr-1 pl-4 whitespace-nowrap transition-all duration-700 lg:flex lg:py-[7px] lg:pr-1.5 lg:pl-5",
+              "site-header-nav absolute top-1/2 left-[calc(50%+1.75rem)] hidden w-max -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border py-[5px] pr-1 pl-4 whitespace-nowrap transition-all duration-700 lg:flex lg:py-[7px] lg:pr-1.5 lg:pl-5",
               solid
                 ? "border-forest/10 bg-white/85 shadow-[0_12px_40px_-18px_rgba(29,58,31,0.45)] backdrop-blur-xl"
                 : "border-white/55 bg-white/25 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur-md",
@@ -105,7 +116,7 @@ export function SiteHeader({
                 key={link.id}
                 href={resolveMenuHref(link.href)}
                 className={cn(
-                  "roll-host relative shrink-0 px-3 py-2 text-[15px] whitespace-nowrap transition-colors lg:px-3.5",
+                  "site-header-link roll-host relative shrink-0 px-3 py-2 text-[15px] whitespace-nowrap transition-colors lg:px-3.5",
                   solid ? "text-forest/80 hover:text-forest" : "py-2 text-white/95 hover:text-white lg:py-2.5",
                 )}
               >
@@ -118,14 +129,14 @@ export function SiteHeader({
             <Link
               href={resolveMenuHref(header.ctaHref)}
               className={cn(
-                "roll-host ml-2 inline-flex h-10 shrink-0 items-center gap-2.5 rounded-full px-4 text-[15px] font-medium whitespace-nowrap transition-colors duration-500 lg:ml-3 lg:px-5",
+                "site-header-cta roll-host ml-2 inline-flex h-10 shrink-0 items-center gap-2.5 rounded-full px-4 text-[15px] font-medium whitespace-nowrap transition-colors duration-500 lg:ml-3 lg:px-5",
                 solid
                   ? "bg-forest text-white hover:bg-leaf"
                   : "bg-white text-forest hover:bg-white/90 lg:h-[clamp(2.15rem,3.4vw,3.15rem)]",
               )}
             >
               <RollText>{header.ctaLabel}</RollText>
-              <span className={cn("h-1.5 w-1.5 rounded-full", solid ? "bg-lime-bright" : "bg-forest")} />
+              <span className={cn("site-header-dot h-1.5 w-1.5 rounded-full", solid ? "bg-lime-bright" : "bg-forest")} />
             </Link>
           </nav>
 
@@ -135,7 +146,7 @@ export function SiteHeader({
               aria-label={student ? "Tài khoản của tôi" : "Đăng nhập"}
               title={student ? student.email : "Đăng nhập / Đăng ký"}
               className={cn(
-                "hidden items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 lg:flex",
+                "site-header-account hidden items-center justify-center rounded-full border transition-all duration-500 hover:scale-105 lg:flex",
                 solid ? "size-11" : "size-12",
                 student
                   ? "border-transparent bg-leaf text-base font-semibold text-white"
@@ -155,7 +166,7 @@ export function SiteHeader({
               aria-label={open ? "Đóng menu" : "Mở menu"}
               onClick={() => setOpenedAt(open ? null : pathname)}
               className={cn(
-                "flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md lg:hidden",
+                "site-header-menu flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md lg:hidden",
                 solid || open ? "border-forest/10 bg-white text-forest" : "border-white/30 bg-white/10 text-white",
               )}
             >

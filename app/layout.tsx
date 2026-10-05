@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { ScrollTextReveal } from "@/components/site/ScrollTextReveal";
@@ -34,6 +35,9 @@ export default function RootLayout({
   return (
     <html lang="vi" className={`${font.variable} h-full`}>
       <body className="min-h-full">
+        <Script id="hero-header-boot" strategy="beforeInteractive">
+          {`(function(){try{var p=location.pathname;if(p!=="/"&&p!=="")return;var s=document.createElement("style");s.id="hero-header-boot-style";s.textContent=".site-header-bar{height:119px!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:none!important}.site-header-logo{width:95px!important;height:95px!important;transition:none!important}.site-header-nav{border-color:rgba(255,255,255,.55)!important;background:rgba(255,255,255,.25)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)!important;transition:none!important}.site-header-link{color:rgba(255,255,255,.95)!important;transition:none!important}.site-header-cta{background:#fff!important;color:#1d3a1f!important;transition:none!important}@media(min-width:1024px){.site-header-cta{height:clamp(2.15rem,3.4vw,3.15rem)!important}}.site-header-dot{background:#1d3a1f!important}.site-header-account{width:3rem!important;height:3rem!important;border-color:rgba(255,255,255,.3)!important;background:rgba(255,255,255,.1)!important;color:#fff!important;transition:none!important}.site-header-menu{border-color:rgba(255,255,255,.3)!important;background:rgba(255,255,255,.1)!important;color:#fff!important}";document.head.appendChild(s);}catch(e){}})();`}
+        </Script>
         <AuthProvider>
           {children}
           <ScrollTextReveal />
