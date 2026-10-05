@@ -332,6 +332,16 @@ html.lenis body {
   display: flex;
   width: max-content;
   animation: marquee var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.marquee-run {
+  display: flex;
+  width: max-content;
+  animation: marquee-run var(--marquee-duration, 28s) linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .marquee-pause:hover .marquee {
@@ -340,10 +350,19 @@ html.lenis body {
 
 @keyframes marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-run {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(var(--marquee-shift, 50%) * -1), 0, 0);
   }
 }
 
@@ -406,6 +425,7 @@ html.lenis body {
 
 @media (prefers-reduced-motion: reduce) {
   .marquee,
+  .marquee-run,
   .kenburns,
   .float-y,
   .avatar-float,

@@ -20,7 +20,7 @@ export function ContactDock({ phone, zalo }: { phone: string; zalo: string }) {
   if (!tel && !zaloHref) return null;
 
   return (
-    <div className="fixed top-1/2 left-3 z-40 flex -translate-y-1/2 flex-col gap-4 md:left-4">
+    <div className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] left-3 z-40 flex flex-col gap-3 md:top-1/2 md:bottom-auto md:left-4 md:-translate-y-1/2 md:gap-4">
       {zaloHref && (
         <a
           href={zaloHref}

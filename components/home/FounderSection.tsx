@@ -22,7 +22,7 @@ export function FounderSection({ founder }: { founder: FounderContent }) {
       <div className="flex items-center px-6 py-14 md:px-12 lg:px-16 lg:py-20">
         <div className="max-w-xl">
           <Reveal>
-            <h2 className="text-[clamp(2rem,3.8vw,3rem)] leading-[1.15] font-normal tracking-tight text-forest">
+            <h2 className="text-[clamp(1.85rem,7.2vw,3rem)] leading-[1.42] font-normal tracking-tight text-forest md:text-[clamp(2rem,3.8vw,3rem)] md:leading-[1.22]">
               {founder.title.split("\n").map((l, i) => (
                 <span key={i} className="block">
                   {l}

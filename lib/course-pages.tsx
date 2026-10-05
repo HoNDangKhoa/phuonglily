@@ -95,25 +95,25 @@ export async function CourseDetailPage({ type, slug }: { type: LearnableType; sl
             <span className="line-clamp-1 text-forest">{post.title}</span>
           </nav>
           {post.thumbnail && (
-            <div className="relative aspect-[21/8] min-h-[200px] overflow-hidden rounded-[28px] bg-white">
+            <div className="relative isolate aspect-[16/9] overflow-hidden rounded-[24px] bg-white md:aspect-[2/1] lg:aspect-[21/8] lg:rounded-[28px]">
               <Image
                 src={post.thumbnail}
                 alt={post.title}
                 fill
                 priority
                 sizes="100vw"
-                className="kenburns object-cover"
+                className="object-cover"
               />
             </div>
           )}
         </div>
       </section>
 
-      <section className="bg-sage pt-8 pb-20">
+      <section className="relative z-10 bg-sage pt-5 pb-20 md:pt-8">
         <div className="container-site grid gap-8 lg:grid-cols-[1fr_380px]">
           <div className="space-y-5">
             <article className="rounded-[24px] bg-white p-6 md:p-8">
-              <h1 className="text-[clamp(1.6rem,3vw,2.3rem)] leading-tight font-normal text-forest">
+              <h1 className="text-[clamp(1.45rem,5.4vw,2.3rem)] leading-[1.38] font-normal text-forest md:leading-snug">
                 {post.title}
               </h1>
               {post.category && (

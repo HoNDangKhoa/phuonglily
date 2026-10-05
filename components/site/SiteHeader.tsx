@@ -72,7 +72,7 @@ export function SiteHeader({
         <div
           className={cn(
             "relative mx-auto flex w-full max-w-[1440px] items-center px-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] md:px-8 lg:px-[clamp(1.25rem,5.76vw,5.2rem)]",
-            solid ? "h-[74px]" : "h-[119px]",
+            solid ? "h-[74px] bg-sage/95 shadow-[0_8px_24px_-18px_rgba(29,58,31,0.45)] backdrop-blur-md" : "h-[119px]",
           )}
         >
           <Link href="/" aria-label={siteName} className="relative z-10 shrink-0">

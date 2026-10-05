@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { RunningLine } from "@/components/site/RunningLine";
 import { resolveMenuHref } from "@/lib/cms";
 import type { SiteSettings } from "@/lib/queries";
 
@@ -183,22 +184,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
         </div>
       </div>
 
-      <div className="pointer-events-none relative mt-1 overflow-hidden py-1 select-none" aria-hidden>
-        <div className="marquee items-center [--marquee-duration:36s]">
-          {[0, 1].map((dup) => (
-            <div key={dup} className="flex shrink-0">
-              {Array.from({ length: 3 }, (_, i) => (
-                <span
-                  key={i}
-                  className="pr-[0.35em] pb-[0.08em] text-[clamp(3.2rem,8vw,6.5rem)] leading-[1.05] font-semibold tracking-[-0.04em] whitespace-nowrap text-forest/25"
-                >
-                  {running}
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
+      <RunningLine text={running} />
     </footer>
   );
 }
