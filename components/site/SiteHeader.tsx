@@ -20,10 +20,11 @@ export function SiteHeader({
   siteName: string;
 }) {
   const pathname = usePathname();
-  // usePathname() is empty on the first server/client render, so the header
-  // would stay in the compact bar until something else caused a re-render.
+  // The first server and client render must match. usePathname() is empty on
+  // the server and already "/" on the client, so using it immediately leaves
+  // the compact bar in the DOM until a later class change (scroll).
   const [locationPath, setLocationPath] = useState<string | null>(null);
-  const overHero = (locationPath ?? pathname) === "/";
+  const overHero = locationPath === "/";
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [openedAt, setOpenedAt] = useState<string | null>(null);
@@ -50,7 +51,9 @@ export function SiteHeader({
   }, [pathname]);
 
   useEffect(() => {
-    if (locationPath === "/") document.getElementById("hero-header-boot-style")?.remove();
+    if (locationPath !== "/") return;
+    document.documentElement.dataset.headerReady = "1";
+    document.getElementById("hero-header-boot-style")?.remove();
   }, [locationPath]);
 
   useEffect(() => {
