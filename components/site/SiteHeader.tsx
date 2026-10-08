@@ -108,7 +108,7 @@ export function SiteHeader({
 
           <nav
             className={cn(
-              "site-header-nav absolute top-1/2 left-[calc(50%+1.75rem)] hidden w-max -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border py-[5px] pr-1 pl-4 whitespace-nowrap transition-all duration-700 lg:flex lg:py-[7px] lg:pr-1.5 lg:pl-5",
+              "site-header-nav absolute top-1/2 left-1/2 hidden w-max -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 rounded-full border py-[5px] pr-1 pl-3 whitespace-nowrap transition-all duration-700 lg:flex lg:py-[7px] lg:pr-1.5 xl:left-[calc(50%+1.25rem)] 2xl:left-[calc(50%+1.75rem)] 2xl:pl-5",
               solid
                 ? "border-forest/10 bg-white/85 shadow-[0_12px_40px_-18px_rgba(29,58,31,0.45)] backdrop-blur-xl"
                 : "border-white/55 bg-white/25 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur-md",
@@ -119,7 +119,7 @@ export function SiteHeader({
                 key={link.id}
                 href={resolveMenuHref(link.href)}
                 className={cn(
-                  "site-header-link roll-host relative shrink-0 px-3 py-2 text-[15px] whitespace-nowrap transition-colors lg:px-3.5",
+                  "site-header-link roll-host relative shrink-0 px-2 py-2 text-[13px] whitespace-nowrap transition-colors xl:px-2.5 xl:text-[14px] 2xl:px-3.5 2xl:text-[15px]",
                   solid ? "text-forest/80 hover:text-forest" : "py-2 text-white/95 hover:text-white lg:py-2.5",
                 )}
               >
@@ -132,7 +132,7 @@ export function SiteHeader({
             <Link
               href={resolveMenuHref(header.ctaHref)}
               className={cn(
-                "site-header-cta roll-host ml-2 inline-flex h-10 shrink-0 items-center gap-2.5 rounded-full px-4 text-[15px] font-medium whitespace-nowrap transition-colors duration-500 lg:ml-3 lg:px-5",
+                "site-header-cta roll-host ml-1.5 inline-flex h-10 shrink-0 items-center gap-2 rounded-full px-3 text-[13px] font-medium whitespace-nowrap transition-colors duration-500 xl:ml-2 xl:gap-2.5 xl:px-4 xl:text-[14px] 2xl:ml-3 2xl:px-5 2xl:text-[15px]",
                 solid
                   ? "bg-forest text-white hover:bg-leaf"
                   : "bg-white text-forest hover:bg-white/90 lg:h-[clamp(2.15rem,3.4vw,3.15rem)]",
