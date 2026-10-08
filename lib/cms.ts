@@ -68,6 +68,7 @@ export const MENU_PAGES = [
   { href: "/hoc-online", label: "Lớp tập online" },
   { href: "/lich-su-kien", label: "Lịch sự kiện" },
   { href: "/blog", label: "Kiến thức Yoga" },
+  { href: "/tuyen-dung", label: "Tuyển dụng" },
   { href: "/lien-he", label: "Liên hệ" },
 ] as const;
 
@@ -87,6 +88,9 @@ const MENU_ALIAS: Record<string, string> = {
   "kien-thuc-yoga": "/blog",
   "lien-he": "/lien-he",
   contact: "/lien-he",
+  "tuyen-dung": "/tuyen-dung",
+  "tuyen-dung-yoga": "/tuyen-dung",
+  careers: "/tuyen-dung",
 };
 
 /** Đưa link menu về một trang đang có, kể cả khi admin gõ nhầm slug. */

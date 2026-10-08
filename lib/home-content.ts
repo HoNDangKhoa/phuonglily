@@ -147,6 +147,7 @@ export function defaultHeader(): HeaderContent {
       { id: "nav_3", label: "Học Online", href: "/hoc-online" },
       { id: "nav_4", label: "Lịch Sự Kiện", href: "/lich-su-kien" },
       { id: "nav_5", label: "Blog", href: "/blog" },
+      { id: "nav_6", label: "Tuyển dụng", href: "/tuyen-dung" },
     ],
     ctaLabel: "Liên Hệ",
     ctaHref: "/lien-he",

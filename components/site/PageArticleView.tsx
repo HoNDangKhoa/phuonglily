@@ -8,11 +8,13 @@ export function PageArticleView({
   fallbackTitle,
   intro,
   crumbs,
+  flushBottom,
 }: {
   article: PageArticle;
   fallbackTitle: string;
   intro?: string;
   crumbs: { label: string; href?: string }[];
+  flushBottom?: boolean;
 }) {
   const content = toRichHtml(article.content);
 
@@ -29,7 +31,7 @@ export function PageArticleView({
   return (
     <>
       <PageHero title={title} description={intro} crumbs={crumbs} />
-      <section className="bg-sage pb-24">
+      <section className={flushBottom ? "bg-sage pb-8" : "bg-sage pb-24"}>
         <div className="container-site">
           <div className="mx-auto max-w-4xl overflow-hidden rounded-[28px] bg-white">
             {article.imageUrl && (

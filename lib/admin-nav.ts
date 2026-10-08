@@ -72,6 +72,7 @@ export const adminNav: AdminNavItem[] = [
     icon: "pages",
     children: [
       { label: "Giới thiệu", href: "/admin/static/about" },
+      { label: "Tuyển dụng", href: "/admin/static/recruitment" },
       { label: "Chính sách bảo mật", href: "/admin/static/privacy-policy" },
       { label: "Chính sách hoàn phí", href: "/admin/static/refund-policy" },
       { label: "Điều khoản sử dụng", href: "/admin/static/terms-condition" },

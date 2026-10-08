@@ -6,6 +6,7 @@ export type PageArticle = {
 
 export const PAGE_ARTICLE_KEYS = [
   "about",
+  "recruitment",
   "privacy-policy",
   "refund-policy",
   "terms-condition",
@@ -26,6 +27,12 @@ export const PAGE_ARTICLE_CONFIG: Record<
     path: "/gioi-thieu",
     noun: "bài giới thiệu",
     hint: "Dùng định dạng Heading trong trình soạn thảo để chia đoạn (câu chuyện, sứ mệnh, giá trị…).",
+  },
+  recruitment: {
+    label: "Tuyển dụng",
+    path: "/tuyen-dung",
+    noun: "bài tuyển dụng",
+    hint: "Bài giới thiệu vị trí đang tuyển. Form đăng ký phía dưới trang luôn hiển thị.",
   },
   "privacy-policy": {
     label: "Chính sách bảo mật",
@@ -60,6 +67,19 @@ export function defaultPageArticle(key: PageArticleKey): PageArticle {
           "<p>Đào tạo thế hệ huấn luyện viên Yoga vững kiến thức giải phẫu, thành thạo kỹ năng giảng dạy và lan toả lối sống lành mạnh tới cộng đồng.</p>",
           "<h2>Giá trị cốt lõi</h2>",
           "<ul><li>Đào tạo chuyên sâu, bài bản theo chuẩn quốc tế</li><li>Học online linh hoạt, phù hợp mọi lịch trình</li><li>Đồng hành lâu dài cùng học viên sau khoá học</li></ul>",
+        ].join(""),
+      };
+    case "recruitment":
+      return {
+        title: "Tuyển dụng",
+        imageUrl: "/images/class-training.jpg",
+        content: [
+          "<h2>Đồng hành cùng Phương Lily Academy</h2>",
+          "<p>Phương Lily Academy tìm những người muốn giảng dạy, hỗ trợ học viên và xây dựng cộng đồng Yoga một cách bài bản. Chúng tôi chào đón giáo viên, trợ giảng và cộng tác viên có cùng định hướng: hiểu cơ thể, thực hành an toàn và đồng hành lâu dài.</p>",
+          "<h2>Vị trí đang mở</h2>",
+          "<ul><li>Giáo viên Yoga</li><li>Trợ giảng</li><li>Cộng tác nội dung</li><li>Chăm sóc học viên</li></ul>",
+          "<h2>Bạn phù hợp khi</h2>",
+          "<p>Bạn có nền tảng thực hành Yoga, muốn học thêm về giải phẫu và giảng dạy, hoặc đã có kinh nghiệm đứng lớp và muốn phát triển cùng học viện. Kinh nghiệm không phải điều kiện bắt buộc với một số vị trí hỗ trợ.</p>",
         ].join(""),
       };
     case "privacy-policy":

@@ -197,6 +197,15 @@ export function parseBannerData(raw?: string | null): BannerData {
     if (merged.footer.wordmark.replace(/\s+/g, "").toLowerCase() === "phuonglilyacademy") {
       merged.footer.wordmark = "Phuong Lily Academy";
     }
+    const hasRecruitment = merged.header.links.some(
+      (link) => link.href === "/tuyen-dung" || link.label.trim().toLowerCase() === "tuyển dụng",
+    );
+    if (!hasRecruitment) {
+      merged.header.links = [
+        ...merged.header.links,
+        { id: "nav_tuyen_dung", label: "Tuyển dụng", href: "/tuyen-dung" },
+      ];
+    }
     return merged;
   } catch {
     return base;

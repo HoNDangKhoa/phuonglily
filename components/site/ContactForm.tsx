@@ -11,10 +11,20 @@ export function ContactForm({
   programs,
   defaultProgram = "",
   compact,
+  programLabel = "Chương trình quan tâm",
+  emptyProgramLabel = "Chương trình quan tâm",
+  submitLabel = "Gửi đăng ký",
+  successMessage = "Đăng ký thành công! Phương Lily Academy sẽ liên hệ bạn trong 24 giờ.",
+  messagePlaceholder = "Lời nhắn",
 }: {
   programs: string[];
   defaultProgram?: string;
   compact?: boolean;
+  programLabel?: string;
+  emptyProgramLabel?: string;
+  submitLabel?: string;
+  successMessage?: string;
+  messagePlaceholder?: string;
 }) {
   const [state, setState] = useState<{ status: "idle" | "sending" | "ok" | "error"; message?: string }>({
     status: "idle",
@@ -37,7 +47,7 @@ export function ContactForm({
         const body = (await res?.json().catch(() => ({}))) as { error?: string };
         if (res?.ok) {
           form.reset();
-          setState({ status: "ok", message: "Đăng ký thành công! Phương Lily Academy sẽ liên hệ bạn trong 24 giờ." });
+          setState({ status: "ok", message: successMessage });
         } else {
           setState({ status: "error", message: body?.error || "Không gửi được, vui lòng thử lại." });
         }
@@ -47,20 +57,20 @@ export function ContactForm({
         <input name="fullName" required minLength={2} placeholder="Họ và tên *" className={field} />
         <input name="phone" required minLength={8} placeholder="Số điện thoại *" className={field} />
         <input name="email" type="email" required placeholder="Email *" className={field} />
-        <select name="serviceType" defaultValue={defaultProgram} className={field}>
-          <option value="">Chương trình quan tâm</option>
+        <select name="serviceType" defaultValue={defaultProgram} required={programs.length > 0 && programLabel !== "Chương trình quan tâm"} aria-label={programLabel} className={field}>
+          <option value="">{emptyProgramLabel}</option>
           {options.map((p) => (
             <option key={p} value={p}>
-              {p}
+              {p.includes(" · ") ? p.split(" · ").slice(1).join(" · ") : p}
             </option>
           ))}
         </select>
       </div>
-      <textarea name="message" rows={compact ? 3 : 5} placeholder="Lời nhắn" className={field} />
+      <textarea name="message" rows={compact ? 3 : 5} placeholder={messagePlaceholder} className={field} />
       <div className="flex flex-wrap items-center gap-4 pt-1">
         <RollButton
           type="submit"
-          label={state.status === "sending" ? "Đang gửi…" : "Gửi đăng ký"}
+          label={state.status === "sending" ? "Đang gửi…" : submitLabel}
           className={cn(state.status === "sending" && "pointer-events-none opacity-70")}
         />
         {state.message && (

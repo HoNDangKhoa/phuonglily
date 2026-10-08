@@ -34,14 +34,14 @@ export function RunningLine({ text }: { text: string }) {
   }, [text]);
 
   const phrase = (
-    <span className="inline-flex shrink-0 items-center pr-[0.45em] pb-[0.12em] text-[clamp(2.75rem,8vw,6.5rem)] leading-[1.12] font-semibold tracking-[-0.04em] whitespace-nowrap text-forest/25">
+    <span className="inline-flex shrink-0 items-center pr-[0.45em] text-[clamp(1.65rem,7vw,2.4rem)] leading-none font-semibold tracking-[-0.04em] whitespace-nowrap text-forest/25 md:text-[clamp(2.75rem,8vw,6.5rem)] md:leading-[1.05]">
       {text}
     </span>
   );
 
   return (
     <div
-      className="pointer-events-none overflow-hidden pt-2 pb-[max(8.5rem,env(safe-area-inset-bottom))] select-none md:pb-4"
+      className="pointer-events-none overflow-hidden pt-1 pb-[max(0.75rem,env(safe-area-inset-bottom))] select-none md:pt-2 md:pb-4"
       aria-hidden
     >
       <div ref={track} className="marquee-run">

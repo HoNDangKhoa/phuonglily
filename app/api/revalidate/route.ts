@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
   const paths = body.paths?.length
     ? body.paths
-    : ["/", "/khoa-hoc", "/hoc-online", "/lich-su-kien", "/blog", "/lien-he", "/gioi-thieu"];
+    : ["/", "/khoa-hoc", "/hoc-online", "/lich-su-kien", "/blog", "/lien-he", "/gioi-thieu", "/tuyen-dung"];
 
   await invalidateCmsCache(body.slugs || []);
 

@@ -10,14 +10,14 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  if (!isPageArticleKey(slug) || slug === "about") return {};
+  if (!isPageArticleKey(slug) || slug === "about" || slug === "recruitment") return {};
   const s = await getSiteSettings();
   return { title: s.pageArticles[slug].title || PAGE_ARTICLE_CONFIG[slug].label };
 }
 
 export default async function PolicyPage({ params }: Props) {
   const { slug } = await params;
-  if (!isPageArticleKey(slug) || slug === "about") notFound();
+  if (!isPageArticleKey(slug) || slug === "about" || slug === "recruitment") notFound();
   const s = await getSiteSettings();
   const policy = s.footer.policies.find((p) => p.href.endsWith(`/chinh-sach/${slug}`));
   const label = policy?.label || PAGE_ARTICLE_CONFIG[slug].label;
